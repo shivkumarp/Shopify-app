@@ -7,6 +7,9 @@ use Illuminate\Notifications\Notifiable;
 use Osiset\ShopifyApp\Contracts\ShopModel as IShopModel;
 use Osiset\ShopifyApp\Traits\ShopModel;
 use App\Models\FakeProduct;
+use App\Models\Tag;
+use App\Models\ScriptTag;
+use App\Models\AgeRestriction;
 
 class User extends Authenticatable implements IShopModel
 {
@@ -17,6 +20,9 @@ class User extends Authenticatable implements IShopModel
         'name',
         'email',
         'password',
+        'store_name',
+        'store_url',
+        'store_id'
     ];
 
     protected $hidden = [
@@ -31,5 +37,20 @@ class User extends Authenticatable implements IShopModel
     public function fakeProducts()
     {
         return $this->hasMany(FakeProduct::class);
+    }
+
+    public function tags()
+    {
+        return $this->hasMany(Tag::class);
+    }
+
+    public function scriptTags()
+    {
+        return $this->hasMany(ScriptTag::class);
+    }
+
+    public function ageRestrictions()
+    {
+        return $this->hasOne(AgeRestriction::class);
     }
 }

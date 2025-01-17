@@ -8,6 +8,7 @@
 
     @viteReactRefresh
     @vite('resources/js/index.jsx')
+    @vite('resources/css/app.css')
 </head>
 <body>
     

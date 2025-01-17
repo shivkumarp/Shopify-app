@@ -3,7 +3,7 @@ import { AppProvider, Page } from "@shopify/polaris";
 import { useState } from "react";
 import enTranslations from "@shopify/polaris/locales/en.json";
 import MissingApiKey from "./components/MissingApiKey";
-import ProductCreator from "./components/ProductCreator";
+import AgeRestrictionSettings from "./components/AgeRestrictionSettings";
 
 const App = () => {
     const [appBridgeConfig] = useState(() => {
@@ -27,7 +27,7 @@ const App = () => {
         <AppProvider i18n={enTranslations}>
             <Provider config={appBridgeConfig}>
                 <Page>
-                    <ProductCreator />
+                    <AgeRestrictionSettings />
                 </Page>
             </Provider>
         </AppProvider>

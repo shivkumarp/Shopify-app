@@ -9,8 +9,8 @@ const DeleteCreatedData = () => {
 
     const deleteFakeData = () => {
         setLoading(true)
-
         axios.delete('/fake-data').then(() => {
+            console.log('Fake Data Deleted')    
             setLoading(false)
 
             setToastMessage('Deleting Fake Data')
