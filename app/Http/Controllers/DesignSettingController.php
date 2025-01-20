@@ -2,17 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AgeRestriction;
 use App\Models\DesignSetting;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 class DesignSettingController extends Controller
 {
-    public function index()
-    {
-        return DesignSetting::all();
-    }
-
     public function savePopupDesignData(Request $request)
     {
         try {
@@ -77,21 +73,59 @@ class DesignSettingController extends Controller
         }
     }
 
-    public function show($id)
+    public function ageRestrictionSetting(Request $request)
     {
-        return DesignSetting::findOrFail($id);
+        try {
+            $validatedData = $request->validate([
+                'minimumAge' => 'nullable|integer|min:13|max:120',
+                'validationType' => 'nullable|string|in:block,message,redirect',
+                'redirectUrl' => 'nullable|url|max:255',
+                'pageViewType' => 'nullable|string|in:all,specific',
+                'popupEnabled' => 'nullable|boolean',
+                'rememberVerificationDays' => 'nullable|integer|min:15|max:90',
+            ]);
+    
+            $shop = $request->user();
+            $cleanShopName = trim($shop->name, '*');
+            $storeName = explode('.', $cleanShopName)[0];
+            
+            $defaultMessages = [
+                'block' => "Access to the website is restricted.",
+                'message' => "You are not able to see website.",
+                'redirect' => "You are being redirected to another page.",
+            ];
+    
+            $message = $defaultMessages[$validatedData['validationType']] ?? null;
+    
+            $formattedData = [
+                'user_id' => $shop->id,
+                'widget_name' => $storeName ?? null,
+                'minimum_age' => $validatedData['minimumAge'] ?? null,
+                'validation_type' => $validatedData['validationType'] ?? null,
+                'validation_message' => $message,
+                'validation_redirect_url' => $validatedData['redirectUrl'] ?? null,
+                'page_view_type' => $validatedData['pageViewType'] ?? null,
+                'remember_verification_days' => $validatedData['rememberVerificationDays'] ?? null,
+                'popup_enabled' => $validatedData['popupEnabled'] ?? false,
+            ];
+    
+            $ageSettings = AgeRestriction::updateOrCreate(
+                ['user_id' => $shop->id],
+                $formattedData
+            );
+    
+            return response()->json([
+                'success' => true,
+                'data' => $ageSettings,
+                'message' => 'Age settings saved successfully',
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error saving age restriction settings',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
-
-    public function update(Request $request, $id)
-    {
-        $designSetting = DesignSetting::findOrFail($id);
-        $designSetting->update($request->all());
-        return response()->json($designSetting, 200);
-    }
-
-    public function delete($id)
-    {
-        DesignSetting::findOrFail($id)->delete();
-        return response()->json(null, 204);
-    }
+    
 }

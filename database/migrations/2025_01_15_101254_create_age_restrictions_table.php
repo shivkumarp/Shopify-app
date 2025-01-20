@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('validation_message')->nullable();
             $table->string('validation_redirect_url')->nullable();
             $table->integer('remember_verification_days')->default(30);
+            $table->boolean('popup_enabled')->default(false);
             $table->timestamps();
         });
     }

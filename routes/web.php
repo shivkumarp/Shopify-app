@@ -35,4 +35,5 @@ Route::middleware(['verify.shopify', CheckAccessScopes::class, Billabe::class])-
     Route::get('/get-products',[ProductController::class,'showProducts'])->name('get-products');
     Route::post('/save-products-app',[ProductController::class,'saveProductsApp'])->name('save-products-app');
     Route::post('/delete-products-app',[ProductController::class,'deleteProductApp'])->name('delete-products-app');
+    Route::post('/age-restriction/settings' ,[DesignSettingController::class,'ageRestrictionSetting'])->name('age-restriction-settings');
 });

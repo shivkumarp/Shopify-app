@@ -1,7 +1,9 @@
-import { Button, Checkbox, FormLayout, Frame, Layout, Page, RangeSlider, Select, TextField, Toast, LegacyTabs, Modal, Text, Spinner } from '@shopify/polaris';
-import { useCallback, useEffect, useState } from 'react';
+import { Button, Checkbox, FormLayout, Frame, Layout, Page, RangeSlider, Select, TextField, Toast, LegacyTabs, Modal, Text } from '@shopify/polaris';
+import { useCallback, useState } from 'react';
 import useAxios from '../hooks/useAxios';
 import PopupDesignTab from './PopupDesignTab';
+import ProductSelectionList from './ProductSelectionList';
+import { tabs, validationTypes, pageViewTypes } from '../helpers/constants';
 
 const AgeRestrictionSettings = () => {
     const [selectedTab, setSelectedTab] = useState(0);
@@ -9,7 +11,6 @@ const AgeRestrictionSettings = () => {
     const [loading, setLoading] = useState(false);
     const { axios } = useAxios();
     const [products, setProducts] = useState({ selected: [], not_selected: [] });
-    const [selectedProducts, setSelectedProducts] = useState([]);
 
     const [settings, setSettings] = useState({
         minimumAge: 40,
@@ -27,10 +28,9 @@ const AgeRestrictionSettings = () => {
         setIsModalActive((active) => !active);
     }, []);
 
-    //Get Products
-    const getProducts = useCallback(() => {
-        setLoading(true);
-        axios
+    //Get Products Api
+    const getProducts = useCallback(async () => {
+      await axios
             .get('/get-products')
             .then((response) => {
                 const { selected = [], not_selected = [] } = response.data.data || {};
@@ -41,85 +41,15 @@ const AgeRestrictionSettings = () => {
                 setToastMessage('Failed to fetch products');
                 setProducts({ selected: [], not_selected: [] });
             })
-            .finally(() => setLoading(false));
     }, [axios]);
 
-    const handleProductSelect = useCallback((id) => {
-        setSelectedProducts((prevSelected) =>
-            prevSelected.includes(id)
-                ? prevSelected.filter((productId) => productId !== id)
-                : [...prevSelected, id]
-        );
-    }, []);
-
-    const saveSelectedProducts = useCallback(() => {
-        const allProducts = [
-            ...(products.selected || []),
-            ...(products.not_selected || [])
-        ];
-
-        const selectedItems = allProducts.filter(product =>
-            selectedProducts.includes(product.product_id)
-        );
-
-        if (selectedItems.length === 0) {
-            setToastMessage('No products selected');
-            return;
-        }
-
-        axios
-            .post('/save-products-app', { products: selectedItems })
-            .then((response) => {
-                console.log(response);
-                setToastMessage('Products saved successfully');
-                setSettings(prev => ({
-                    ...prev,
-                    specificUrls: selectedItems
-                }));
-                toggleModal();
-            })
-            .catch((error) => {
-                console.error('Error saving products:', error);
-                setToastMessage('Failed to save products');
-            });
-    }, [products, selectedProducts, toggleModal]);
-
-    const handleDeleteSelectedProducts = useCallback(() => {
-        const selectedItems = products.selected.filter((product) =>
-            selectedProducts.includes(product.product_id)
-        );
-    
-        if (selectedItems.length === 0) {
-            setToastMessage('No products selected for deletion');
-            return;
-        }
-    
-        axios
-            .post('/delete-products-app', { products: selectedItems })
-            .then((response) => {
-                console.log(response);
-                setToastMessage('Selected products deleted successfully');
-    
-                // Update the state by removing deleted products
-                setProducts((prev) => ({
-                    selected: prev.selected.filter(
-                        (product) => !selectedProducts.includes(product.product_id)
-                    ),
-                    not_selected: [...prev.not_selected, ...selectedItems],
-                }));
-                setSelectedProducts([]); 
-            })
-            .catch((error) => {
-                console.error('Error deleting products:', error);
-                setToastMessage('Failed to delete selected products');
-            });
-    }, [products, selectedProducts]);
-    
+    //Open Modal
     const openModal = useCallback(() => {
         getProducts();
         toggleModal();
     }, [getProducts, toggleModal]);
 
+    //Tab Change
     const handleTabChange = useCallback((selectedTabIndex) => {
         setSelectedTab(selectedTabIndex);
     }, []);
@@ -128,9 +58,10 @@ const AgeRestrictionSettings = () => {
         setSettings(prev => ({ ...prev, [field]: value }));
     }, []);
 
+    // Save Age Restriction Settings
     const saveSettings = useCallback(() => {
         setLoading(true);
-        axios
+         axios
             .post('/age-restriction/settings', settings)
             .then(() => {
                 setToastMessage('Settings saved successfully');
@@ -141,67 +72,6 @@ const AgeRestrictionSettings = () => {
             })
             .finally(() => setLoading(false));
     }, [axios, settings]);
-
-    const tabs = [
-        { id: 'design-tab', content: 'Popup Design' },
-        { id: 'settings-tab', content: 'Settings' },
-    ];
-
-    const ProductSelectionList = ({ products, selectedProducts, handleProductSelect }) => {
-        const renderProductList = (productList, listType) => (
-            productList.map((product) => (
-                <div
-                    key={product.product_id}
-                    className="flex items-center justify-between p-3 border-b last:border-b-0"
-                >
-                    <label className="flex items-center space-x-3">
-                        <input
-                            type="checkbox"
-                            checked={selectedProducts.includes(product.product_id)}
-                            onChange={() => handleProductSelect(product.product_id)}
-                            className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                        />
-                        <span className="text-sm font-medium text-gray-700">
-                            {product.title} - {product.price === '0.00' ? '$0.00' : `$${product.price}`}
-                        </span>
-                    </label>
-                    <span className="text-xs text-gray-500">ID: {product.product_id}</span>
-                </div>
-            ))
-        );
-
-        return (
-            <div className="space-y-6">
-                {/* Selected Products */}
-                <div className="bg-white rounded-lg shadow">
-                    <h3 className="px-4 py-2 text-lg font-semibold text-gray-800 border-b">
-                        Selected Products
-                    </h3>
-                    <div className="max-h-72 overflow-y-auto">
-                        {products.selected.length > 0 ? (
-                            renderProductList(products.selected)
-                        ) : (
-                            <p className="p-4 text-sm text-gray-500">No selected products.</p>
-                        )}
-                    </div>
-                </div>
-
-                {/* Not Selected Products */}
-                <div className="bg-white rounded-lg shadow">
-                    <h3 className="px-4 py-2 text-lg font-semibold text-gray-800 border-b">
-                        Not Selected Products
-                    </h3>
-                    <div className="max-h-72 overflow-y-auto">
-                        {products.not_selected.length > 0 ? (
-                            renderProductList(products.not_selected)
-                        ) : (
-                            <p className="p-4 text-sm text-gray-500">No unselected products.</p>
-                        )}
-                    </div>
-                </div>
-            </div>
-        );
-    };
 
     return (
         <Frame>
@@ -236,11 +106,7 @@ const AgeRestrictionSettings = () => {
                                     />
                                     <Select
                                         label="Validation Type"
-                                        options={[
-                                            { label: 'Block Page', value: 'block' },
-                                            { label: 'Show Restriction Message', value: 'message' },
-                                            { label: 'Redirect to Specific URL', value: 'redirect' },
-                                        ]}
+                                        options={validationTypes}
                                         value={settings.validationType}
                                         onChange={(value) => handleChange(value, 'validationType')}
                                     />
@@ -254,10 +120,7 @@ const AgeRestrictionSettings = () => {
                                     )}
                                     <Select
                                         label="Page View Type"
-                                        options={[
-                                            { label: 'All Pages', value: 'all' },
-                                            { label: 'Specific Products', value: 'specific' },
-                                        ]}
+                                        options={pageViewTypes}
                                         value={settings.pageViewType}
                                         onChange={(value) => handleChange(value, 'pageViewType')}
                                     />
@@ -276,32 +139,17 @@ const AgeRestrictionSettings = () => {
                                                 open={isModalActive}
                                                 onClose={toggleModal}
                                                 title="Select Specific Products"
-                                                primaryAction={{
-                                                    content: 'Save Selected Products',
-                                                    onAction: saveSelectedProducts,
-                                                }}
-                                                secondaryActions={[
-                                                    {
-                                                        content: 'Delete Selected Products',
-                                                        onAction: handleDeleteSelectedProducts,
-                                                    },
-                                                    {
-                                                        content: 'Cancel',
-                                                        onAction: toggleModal,
-                                                    },
-                                                ]}
                                             >
                                                 <Modal.Section>
                                                     <div className="p-4 bg-gray-50 rounded-lg">
                                                         <ProductSelectionList
                                                             products={products}
-                                                            selectedProducts={selectedProducts}
-                                                            handleProductSelect={handleProductSelect}
+                                                            setProducts={setProducts}
+                                                            setToastMessage={setToastMessage}
                                                         />
                                                     </div>
                                                 </Modal.Section>
                                             </Modal>
-
                                         </>
                                     )}
                                     <RangeSlider

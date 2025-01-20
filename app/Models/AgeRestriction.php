@@ -14,12 +14,12 @@ class AgeRestriction extends Model
         'age',
         'widget_name',
         'page_view_type',
-        'specific_urls',
         'minimum_age',
         'validation_type',
         'validation_message',
         'validation_redirect_url',
         'remember_verification_days',
+        'popup_enabled'
     ];
 
     public function user()
