@@ -12,6 +12,7 @@ class ScriptTag extends Model
 
     protected $fillable = [
         'user_id',
+        'script_tag_id',
         'is_installed',
     ];
 

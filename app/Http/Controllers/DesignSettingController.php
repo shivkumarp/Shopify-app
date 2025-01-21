@@ -73,6 +73,33 @@ class DesignSettingController extends Controller
         }
     }
 
+    public function getPopupDesignData(Request $request)
+    {
+        try {
+            $shop = $request->user();
+
+            $popupDesign = DesignSetting::where('user_id', $shop->id)->first();
+
+            if (!$popupDesign) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No design settings found for this user',
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => $popupDesign,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error retrieving design settings',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
     public function ageRestrictionSetting(Request $request)
     {
         try {
@@ -84,19 +111,19 @@ class DesignSettingController extends Controller
                 'popupEnabled' => 'nullable|boolean',
                 'rememberVerificationDays' => 'nullable|integer|min:15|max:90',
             ]);
-    
+
             $shop = $request->user();
             $cleanShopName = trim($shop->name, '*');
             $storeName = explode('.', $cleanShopName)[0];
-            
+
             $defaultMessages = [
                 'block' => "Access to the website is restricted.",
                 'message' => "You are not able to see website.",
                 'redirect' => "You are being redirected to another page.",
             ];
-    
+
             $message = $defaultMessages[$validatedData['validationType']] ?? null;
-    
+
             $formattedData = [
                 'user_id' => $shop->id,
                 'widget_name' => $storeName ?? null,
@@ -108,12 +135,12 @@ class DesignSettingController extends Controller
                 'remember_verification_days' => $validatedData['rememberVerificationDays'] ?? null,
                 'popup_enabled' => $validatedData['popupEnabled'] ?? false,
             ];
-    
+
             $ageSettings = AgeRestriction::updateOrCreate(
                 ['user_id' => $shop->id],
                 $formattedData
             );
-    
+
             return response()->json([
                 'success' => true,
                 'data' => $ageSettings,
@@ -127,5 +154,4 @@ class DesignSettingController extends Controller
             ], 500);
         }
     }
-    
 }

@@ -4,6 +4,7 @@ import useAxios from '../hooks/useAxios';
 import PopupDesignTab from './PopupDesignTab';
 import ProductSelectionList from './ProductSelectionList';
 import { tabs, validationTypes, pageViewTypes } from '../helpers/constants';
+import { Loader } from 'lucide-react';
 
 const AgeRestrictionSettings = () => {
     const [selectedTab, setSelectedTab] = useState(0);
@@ -30,7 +31,7 @@ const AgeRestrictionSettings = () => {
 
     //Get Products Api
     const getProducts = useCallback(async () => {
-      await axios
+        await axios
             .get('/get-products')
             .then((response) => {
                 const { selected = [], not_selected = [] } = response.data.data || {};
@@ -44,8 +45,14 @@ const AgeRestrictionSettings = () => {
     }, [axios]);
 
     //Open Modal
-    const openModal = useCallback(() => {
-        getProducts();
+
+    const openModal = useCallback(async () => {
+        setLoading(true);
+        try {
+            await getProducts();
+        } finally {
+            setLoading(false);
+        }
         toggleModal();
     }, [getProducts, toggleModal]);
 
@@ -61,17 +68,24 @@ const AgeRestrictionSettings = () => {
     // Save Age Restriction Settings
     const saveSettings = useCallback(() => {
         setLoading(true);
-         axios
-            .post('/age-restriction/settings', settings)
+    
+        // Prepare API calls
+        const saveSettingsApi = axios.post('/age-restriction/settings', settings);
+        const uploadScriptApi = axios.post('/upload-script-tag-shopify');
+    
+        // Call both APIs concurrently
+        Promise.all([saveSettingsApi, uploadScriptApi])
             .then(() => {
+                console.log(saveSettingsApi,uploadScriptApi)
                 setToastMessage('Settings saved successfully');
             })
             .catch((error) => {
-                console.error('Error saving settings:', error);
+                console.error('Error saving settings or uploading script:', error);
                 setToastMessage('Failed to save settings');
             })
             .finally(() => setLoading(false));
     }, [axios, settings]);
+    
 
     return (
         <Frame>
@@ -140,14 +154,20 @@ const AgeRestrictionSettings = () => {
                                                 onClose={toggleModal}
                                                 title="Select Specific Products"
                                             >
-                                                <Modal.Section>
-                                                    <div className="p-4 bg-gray-50 rounded-lg">
-                                                        <ProductSelectionList
-                                                            products={products}
-                                                            setProducts={setProducts}
-                                                            setToastMessage={setToastMessage}
-                                                        />
-                                                    </div>
+                                                <Modal.Section >
+                                                    {loading ? (
+                                                        <div className="flex items-center justify-center h-64">
+                                                            <Loader className="w-8 h-8 animate-spin text-blue-500" />
+                                                        </div>
+                                                    ) : (
+                                                        <div className="p-4 bg-gray-50 rounded-lg">
+                                                            <ProductSelectionList
+                                                                products={products}
+                                                                setProducts={setProducts}
+                                                                setToastMessage={setToastMessage}
+                                                            />
+                                                        </div>
+                                                    )}
                                                 </Modal.Section>
                                             </Modal>
                                         </>

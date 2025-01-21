@@ -117,9 +117,34 @@ const PopupDesignTab = () => {
             })
             .catch((error) => {
                 setLoading(false);
-                setToastMessage('Error saving design settings. Please try again.');
+                setToastMessage('Error saving design settings. Please try again.',error);
             });
     };
+
+    useEffect(() => {
+        axios.get('/get-pop-design-data')
+            .then(response => {
+                if (response.data.success && response.data.data) {
+                    setDesignSettings({
+                        title: response.data.data.title,
+                        description: response.data.data.description,
+                        acceptButtonText: response.data.data.accept_button_text,
+                        rejectButtonText: response.data.data.reject_button_text,
+                        backgroundColor: response.data.data.background_color,
+                        acceptButtonBgColor: response.data.data.accept_button_bg_color,
+                        acceptButtonTextColor: response.data.data.accept_button_text_color,
+                        rejectButtonBgColor: response.data.data.reject_button_bg_color,
+                        rejectButtonTextColor: response.data.data.reject_button_text_color,
+                        textColor: response.data.data.text_color,
+                        fontFamily: response.data.data.font_family,
+                        fontSize: response.data.data.font_size
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching design settings:', error);
+            });
+    }, []);
 
     return (
         <Layout>
@@ -178,6 +203,7 @@ const PopupDesignTab = () => {
                         Save Pop Design
                     </Button>
                 </FormLayout>
+                
                 <div className="mt-5">
                     <div
                         className="p-5 text-center rounded-lg shadow-2xl fixed z-50"
@@ -189,8 +215,8 @@ const PopupDesignTab = () => {
                             ...getPositionStyle(selectedPosition),
                             width: 'auto',
                             height: 'auto',
-                            maxWidth: '50%', 
-                            maxHeight: '50%', 
+                            maxWidth: '50%',
+                            maxHeight: '50%',
                             overflow: 'auto',
                         }}
                     >

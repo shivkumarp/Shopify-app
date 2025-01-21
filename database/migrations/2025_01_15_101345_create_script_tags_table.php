@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('script_tags', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->default(0);
+            $table->string('script_tag_id')->nullable();
             $table->boolean('is_installed')->default(false);
             $table->timestamps();
         });
