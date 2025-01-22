@@ -1,4 +1,4 @@
-(async function () {
+(async function() {
     // Get user_id from script URL
     const scriptTag = document.currentScript;
     const scriptUrl = new URL(scriptTag.src);
@@ -7,7 +7,8 @@
 
     async function loadAgeVerification(userId) {
         try {
-            const response = await fetch(`https://codeoink.com/api/settings/${userId}`, {
+            // Fetch settings from API
+            const response = await fetch(`https://codeoink.com/api/settings/${userId}`, { 
                 method: 'GET',
                 mode: 'cors',
                 credentials: 'include',
@@ -23,98 +24,149 @@
             }
 
             const data = await response.json();
-
             const designSettings = data.design_settings;
             const ageSettings = data.age_restriction_settings;
-            const specificUrl = data.specific_url;
+            const specificUrls = data.specific_url || [];
 
-            // If popup is not enabled or user already gave consent, exit
-            if (!ageSettings?.popup_enabled || checkAgeConsent()) {
+
+            // Function to check if the current URL matches specific URLs
+            function isSpecificUrl() {
+                const currentUrl = window.location.href;
+                return specificUrls.some((url) => currentUrl.includes(url.product_url));
+            }
+
+            // Function to check if age consent has already been given
+            function checkAgeConsent() {
+                return document.cookie.split(';').some((item) => item.trim().startsWith('remember_verification_days=true'));
+            }
+
+            // Exit if popup is disabled or consent already given
+            if (!ageSettings ?.popup_enabled || checkAgeConsent()) {
                 console.log('Popup disabled or consent already given');
                 return;
             }
-            else if (ageSettings.page_view_type === 'specific') {
-                console.log('Popup Enabled Specific url');
-                return;
-            }
 
-            // Function to create the age verification modal
-            function createAgeVerificationModal(designSettings = {}, ageSettings = {}, specificUrl = {}) {
+            function createAgeVerificationModal(designSettings, ageSettings) {
                 const modal = document.createElement('div');
+
+                // Dynamic positioning logic
+                let positionStyles = '';
+                switch (designSettings.position) {
+                    case 'top-left':
+                        positionStyles = 'top: 10px; left: 10px;';
+                        break;
+                    case 'top-right':
+                        positionStyles = 'top: 10px; right: 10px;';
+                        break;
+                    case 'center':
+                        positionStyles = 'top: 50%; left: 50%; transform: translate(-50%, -50%);';
+                        break;
+                    case 'bottom-left':
+                        positionStyles = 'bottom: 10px; left: 10px;';
+                        break;
+                    case 'bottom-right':
+                        positionStyles = 'bottom: 10px; right: 10px;';
+                        break;
+                    default:
+                        positionStyles = 'top: 10px; left: 10px;';
+                }
+
+                // Modal parent container
                 modal.style.cssText = `
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    background-color: rgba(0, 0, 0, 0.5);
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    z-index: 999999;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 999999;
+                display: block;
                 `;
+
+                // Modal content (child) container
                 const modalContent = document.createElement('div');
                 modalContent.style.cssText = `
-                    background-color: rgb(${designSettings.background_color.red}, ${designSettings.background_color.green}, ${designSettings.background_color.blue});
-                    color: rgb(${designSettings.text_color.red}, ${designSettings.text_color.green}, ${designSettings.text_color.blue});
-                    padding: 20px;
-                    border-radius: 8px;
-                    max-width: 500px;
-                    width: 90%;
-                    text-align: center;
-                    font-family: ${designSettings.font_family};
-                    font-size: ${designSettings.font_size};
+                position: absolute;
+                ${positionStyles}
+                background-color: rgb(${designSettings.background_color.red}, ${designSettings.background_color.green}, ${designSettings.background_color.blue});
+                color: rgb(${designSettings.text_color.red}, ${designSettings.text_color.green}, ${designSettings.text_color.blue});
+                padding: 20px;
+                border-radius: 8px;
+                max-width: 500px;
+                width: 90%;
+                text-align: center;
+                font-family: ${designSettings.font_family};
+                font-size: ${designSettings.font_size};
                 `;
+
                 modalContent.innerHTML = `
                 <h2>${designSettings.title || 'Age Verification'}</h2>
                 <p>${designSettings.description || 'Please verify your age to continue.'}</p>
                 <div>
-                    <button id="confirmAge" style="
-                        background-color: rgb(${designSettings.accept_button_bg_color.red}, ${designSettings.accept_button_bg_color.green}, ${designSettings.accept_button_bg_color.blue});
-                        color: rgb(${designSettings.accept_button_text_color.red}, ${designSettings.accept_button_text_color.green}, ${designSettings.accept_button_text_color.blue});
-                        padding: 10px 20px;
-                        border: none;
-                        border-radius: 5px;
-                        cursor: pointer;
-                        margin-right: 10px;
-                    ">
-                        ${designSettings.accept_button_text || 'Confirm'}
-                    </button>
-                    <button id="rejectAge" style="
-                        background-color: rgb(${designSettings.reject_button_bg_color.red}, ${designSettings.reject_button_bg_color.green}, ${designSettings.reject_button_bg_color.blue});
-                        color: rgb(${designSettings.reject_button_text_color.red}, ${designSettings.reject_button_text_color.green}, ${designSettings.reject_button_text_color.blue});
-                        padding: 10px 20px;
-                        border: none;
-                        border-radius: 5px;
-                        cursor: pointer;
-                    ">
-                        ${designSettings.reject_button_text || 'Reject'}
-                    </button>
-                </div>
-            `;
+                <button id="confirmAge" style="
+                 background-color: rgb(${designSettings.accept_button_bg_color.red}, ${designSettings.accept_button_bg_color.green}, ${designSettings.accept_button_bg_color.blue});
+                 color: rgb(${designSettings.accept_button_text_color.red}, ${designSettings.accept_button_text_color.green}, ${designSettings.accept_button_text_color.blue});
+                 padding: 10px 20px;
+                 border: none;
+                 border-radius: 5px;
+                 cursor: pointer;
+                 margin-right: 10px;
+                 ">
+                 ${designSettings.accept_button_text || 'Confirm'}
+                 </button>
+                 <button id="rejectAge" style="
+                 background-color: rgb(${designSettings.reject_button_bg_color.red}, ${designSettings.reject_button_bg_color.green}, ${designSettings.reject_button_bg_color.blue});
+                 color: rgb(${designSettings.reject_button_text_color.red}, ${designSettings.reject_button_text_color.green}, ${designSettings.reject_button_text_color.blue});
+                 padding: 10px 20px;
+                 border: none;
+                 border-radius: 5px;
+                 cursor: pointer;
+                 ">
+                 ${designSettings.reject_button_text || 'Reject'}
+                 </button>
+                 </div>
+                 `;
 
-                modal.appendChild(modalContent);
                 document.body.appendChild(modal);
+                modal.appendChild(modalContent);
 
+                // Confirm age verification
                 document.getElementById('confirmAge').addEventListener('click', () => {
-                    let remember_verification_days = ageSettings.remember_verification_days || 30;
+                    const rememberDays = ageSettings.remember_verification_days || 30;
                     const expiryDate = new Date();
-                    expiryDate.setDate(expiryDate.getDate() + remember_verification_days);
+                    expiryDate.setDate(expiryDate.getDate() + rememberDays);
                     document.cookie = `remember_verification_days=true; expires=${expiryDate.toUTCString()}; path=/`;
                     modal.remove();
                 });
 
-
+                // Reject age verification
                 document.getElementById('rejectAge').addEventListener('click', () => {
-                    console.log('Age rejected');
-                    modal.remove();
+                    if (ageSettings.validation_type === 'block') {
+                        modalContent.innerHTML = `<p>${ageSettings.validation_message}</p>`;
+                        const overlay = document.createElement('div');
+                        overlay.style.cssText = `
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            z-index: 999999;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        `;
+                        document.body.appendChild(overlay);
+                    } else if (ageSettings.validation_type === 'message') {
+                        alert(ageSettings.validation_message);
+                    } else if (ageSettings.validation_type === 'redirect') {
+                        window.location.href = ageSettings.validation_redirect_url || '/';
+                    }
                 });
             }
 
-            createAgeVerificationModal(designSettings, ageSettings, specificUrl);
-
-            function checkAgeConsent() {
-                return document.cookie.split(';').some((item) => item.trim().startsWith('remember_verification_days=true'));
+            // Show modal based on settings
+            if (ageSettings.page_view_type === 'all' || (ageSettings.page_view_type === 'specific' && isSpecificUrl())) {
+                createAgeVerificationModal(designSettings, ageSettings);
             }
 
         } catch (error) {

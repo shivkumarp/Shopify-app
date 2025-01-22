@@ -47,7 +47,7 @@ export const tabs = [
 
 export const validationTypes = [
     { label: 'Block Page', value: 'block' },
-    { label: 'Show Restriction Message', value: 'message' },
+    { label: 'Alert Page', value: 'message' },
     { label: 'Redirect to Specific URL', value: 'redirect' },
 ];
 
