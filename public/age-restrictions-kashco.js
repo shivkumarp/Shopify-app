@@ -7,7 +7,7 @@
 
     async function loadAgeVerification(userId) {
         try {
-            const response = await fetch(`https://9c21-180-214-141-46.ngrok-free.app/api/settings/${userId}`, {
+            const response = await fetch(`https://codeoink.com/api/settings/${userId}`, {
                 method: 'GET',
                 mode: 'cors',
                 credentials: 'include',
