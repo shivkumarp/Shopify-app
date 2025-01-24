@@ -345,10 +345,10 @@ return [
     */
 
     'webhooks' => [
-        // [
-        //     'topic' => env('SHOPIFY_WEBHOOK_1_TOPIC', ''),
-        //     'address' => env('SHOPIFY_WEBHOOK_1_ADDRESS', '')
-        // ],
+        [
+            'topic' => env('SHOPIFY_WEBHOOK_1_TOPIC', 'APP_UNINSTALLED'),
+            'address' => env('SHOPIFY_WEBHOOK_1_ADDRESS', 'https://54e3-125-62-116-172.ngrok-free.app/api/app-uninstall')
+        ],
         /*
             [
                 'topic' => env('SHOPIFY_WEBHOOK_1_TOPIC', 'ORDERS_CREATE'),

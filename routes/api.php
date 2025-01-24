@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ShopifyUninstallController;
 use App\Http\Controllers\ThemeChangeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,3 +21,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/settings/{userId}', [ThemeChangeController::class, 'getSettings'])->name('theme-settings');
+Route::post('/app-uninstall',[ShopifyUninstallController::class ,'appUninstall'])->name('app-uninstall');
