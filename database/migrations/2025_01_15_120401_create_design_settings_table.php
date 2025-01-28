@@ -32,6 +32,7 @@ return new class extends Migration
             $table->string('font_family')->nullable();
             $table->string('font_size')->nullable();
             $table->string('position')->nullable();
+            $table->string('template_round')->nullable();
             $table->timestamps();
         });
     }
