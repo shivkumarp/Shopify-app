@@ -112,7 +112,7 @@
                     font-size: ${designSettings.font_size || 16}px; /* Dynamic description font size */
                      margin-bottom: 20px;
                      ">
-                     ${descriptionText.replace(/\n/g, '<br/>')} <!-- Replace newlines with <br> -->
+                     ${descriptionText.replace(/\n/g, '<br/>')} 
                      </p>
                     <div>
                         <button id="confirmAge" style="
@@ -171,8 +171,6 @@
                             align-items: center;
                         `;
                         document.body.appendChild(overlay);
-                    } else if (ageSettings.validation_type === 'message') {
-                        alert(ageSettings.validation_message);
                     } else if (ageSettings.validation_type === 'redirect') {
                         window.location.href = ageSettings.validation_redirect_url || '/';
                     }

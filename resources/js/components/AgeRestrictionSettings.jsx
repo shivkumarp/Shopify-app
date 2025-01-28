@@ -17,6 +17,7 @@ const AgeRestrictionSettings = () => {
         minimumAge: 40,
         validationType: 'block',
         redirectUrl: '',
+        blockMessage:"",
         pageViewType: 'all',
         specificUrls: [],
         popupEnabled: true,
@@ -117,19 +118,6 @@ const AgeRestrictionSettings = () => {
                                                 />
                                             </div>
 
-                                            {/* Age Settings Section */}
-                                            <div className="bg-gray-50 p-4 rounded-lg space-y-2">
-                                                <RangeSlider
-                                                    output
-                                                    label={`Minimum Age: ${settings.minimumAge}`}
-                                                    min={13}
-                                                    max={21}
-                                                    step={1}
-                                                    value={settings.minimumAge}
-                                                    onChange={(value) => handleChange(value, 'minimumAge')}
-                                                />
-                                            </div>
-
                                             {/* Validation Settings */}
                                             <div className="bg-gray-50 p-4 rounded-lg space-y-2">
                                                 <Select
@@ -144,6 +132,14 @@ const AgeRestrictionSettings = () => {
                                                         value={settings.redirectUrl}
                                                         onChange={(value) => handleChange(value, 'redirectUrl')}
                                                         placeholder="https://example.com"
+                                                    />
+                                                )}
+                                                {settings.validationType === 'block' && (
+                                                    <TextField
+                                                        label="Block Message"
+                                                        value={settings.blockMessage}
+                                                        onChange={(value) => handleChange(value, 'blockMessage')}
+                                                        placeholder="Restricted Website"
                                                     />
                                                 )}
                                             </div>

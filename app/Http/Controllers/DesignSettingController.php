@@ -111,6 +111,7 @@ class DesignSettingController extends Controller
                 'minimumAge' => 'nullable|integer|min:13|max:120',
                 'validationType' => 'nullable|string|in:block,message,redirect',
                 'redirectUrl' => 'nullable|url|max:255',
+                'blockMessage'=>'nullable|max:255',
                 'pageViewType' => 'nullable|string|in:all,specific',
                 'popupEnabled' => 'nullable|boolean',
                 'rememberVerificationDays' => 'nullable|integer|min:15|max:90',
@@ -121,7 +122,7 @@ class DesignSettingController extends Controller
             $storeName = explode('.', $cleanShopName)[0];
 
             $defaultMessages = [
-                'block' => "Access to the website is restricted.",
+                'block' => $request->blockMessage,
                 'message' => "You are not able to see website.",
                 'redirect' => "You are being redirected to another page.",
             ];
