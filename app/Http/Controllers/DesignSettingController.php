@@ -10,21 +10,25 @@ use Illuminate\Http\Request;
 class DesignSettingController extends Controller
 {
     public function savePopupDesignData(Request $request)
-    {
+    { 
         try {
             $validatedData = $request->validate([
                 'title' => 'nullable|string|max:255',
+                'title_font_size' =>'nullable',
                 'description' => 'nullable|string',
+                'template_round'=>'nullable',
                 'accept_button_text' => 'nullable|string|max:255',
+                'accept_button_round' => 'nullable',
                 'accept_button_text_color' => 'nullable|json',
                 'accept_button_bg_color' => 'nullable|json',
                 'reject_button_text' => 'nullable|string|max:255',
+                'reject_button_round' => 'nullable',
                 'reject_button_text_color' => 'nullable|json',
                 'reject_button_bg_color' => 'nullable|json',
                 'background_color' => 'nullable|json',
                 'text_color' => 'nullable|json',
                 'font_family' => 'nullable|string|max:255',
-                'font_size' => 'nullable|string|max:255',
+                'font_size' => 'nullable',
                 'position' => 'nullable|string|max:255',
             ]);
 

@@ -1,8 +1,9 @@
-import { Button, FormLayout, Layout, Select, TextField, Toast } from '@shopify/polaris';
+import { Button, FormLayout, Layout, RangeSlider, Select, TextField, Toast } from '@shopify/polaris';
 import { useCallback, useEffect, useState } from 'react';
-import { ChromePicker } from 'react-color';
-import { fontOptions, fontSizeOptions, positionOptions } from '../helpers/constants';
+import { fontOptions, themeViewColorSelector, positionOptions, templateDesignForPopUp } from '../helpers/constants';
 import useAxios from '../hooks/useAxios';
+import Popup from './Popup';
+import ColorPicker from './ColorPicker';
 
 const PopupDesignTab = () => {
     const [loading, setLoading] = useState(false)
@@ -20,10 +21,13 @@ const PopupDesignTab = () => {
 
     const [selectedPosition, setSelectedPosition] = useState('top-right');
     const [designSettings, setDesignSettings] = useState({
-        title: 'title',
-        description: 'description',
+        title: 'Title',
+        titleFontSize: "14px",
+        description: 'Description',
         acceptButtonText: 'I am 18+ Years old.',
+        acceptButtonRound: 4,
         rejectButtonText: 'I am not 18+ Years old.',
+        rejectButtonRound: 4,
         backgroundColor: { red: 255, green: 255, blue: 255 },
         acceptButtonBgColor: { red: 255, green: 255, blue: 255 },
         acceptButtonTextColor: { red: 0, green: 0, blue: 0 },
@@ -31,7 +35,8 @@ const PopupDesignTab = () => {
         rejectButtonTextColor: { red: 0, green: 0, blue: 0 },
         textColor: { red: 0, green: 0, blue: 0 },
         fontFamily: 'Arial',
-        fontSize: '16px'
+        fontSize: "14px",
+        templateRound: 4
     });
 
     useEffect(() => {
@@ -49,9 +54,14 @@ const PopupDesignTab = () => {
         };
     }, [colorPickers]);
 
-    const handleChange = useCallback((value, field) => {
-        setDesignSettings((prev) => ({ ...prev, [field]: value }));
-    }, []);
+    const handleChange = (value, field) => {
+        const numericFields = ['acceptButtonRound', 'rejectButtonRound'];
+
+        setDesignSettings(prev => ({
+            ...prev,
+            [field]: numericFields.includes(field) ? Number(value) : value
+        }));
+    };
 
     const handleColorChange = (color, type) => {
         const rgbColor = {
@@ -62,49 +72,26 @@ const PopupDesignTab = () => {
         setDesignSettings((prev) => ({ ...prev, [type]: rgbColor }));
     };
 
-    const getPositionStyle = (position) => {
-        const positions = {
-            center: { top: '50%', left: '50%', transform: 'translate(-50%, -50%)' },
-            'top-right': { top: '10px', right: '10px' },
-            'bottom-left': { bottom: '10px', left: '10px' },
-            'bottom-right': { bottom: '10px', right: '10px' },
-            'top-left': { top: '10px', left: '10px' }
-        };
-        return positions[position] || positions['top-left'];
-    }
-
-    const renderColorPicker = (type, label) => (
-        <div className='mt-6'>
-            <Button onClick={() => setColorPickers((prev) => ({ ...prev, [type]: !prev[type] }))}>
-                {label}
-            </Button>
-            {colorPickers[type] && (
-                <div className={`color-picker-${type}`}>
-                    <ChromePicker
-                        color={designSettings[type]}
-                        onChange={(color) => handleColorChange(color, type)}
-                    />
-                </div>
-            )}
-        </div>
-    );
-
     const savePopDesignData = () => {
         setLoading(true);
         const designData = {
             title: designSettings.title,
+            title_font_size: designSettings.titleFontSize,
             description: designSettings.description,
             accept_button_text: designSettings.acceptButtonText,
+            accept_button_round: designSettings.rejectButtonRound,
             accept_button_text_color: JSON.stringify(designSettings.acceptButtonTextColor),
             accept_button_bg_color: JSON.stringify(designSettings.acceptButtonBgColor),
             reject_button_text: designSettings.rejectButtonText,
+            reject_button_round: designSettings.rejectButtonRound,
             reject_button_text_color: JSON.stringify(designSettings.rejectButtonTextColor),
             reject_button_bg_color: JSON.stringify(designSettings.rejectButtonBgColor),
             background_color: JSON.stringify(designSettings.backgroundColor),
             text_color: JSON.stringify(designSettings.textColor),
             font_family: designSettings.fontFamily,
             font_size: designSettings.fontSize,
-            position: selectedPosition
+            position: selectedPosition,
+            template_round: designSettings.templateRound
         };
 
         console.log(designData);
@@ -117,7 +104,7 @@ const PopupDesignTab = () => {
             })
             .catch((error) => {
                 setLoading(false);
-                setToastMessage('Error saving design settings. Please try again.',error);
+                setToastMessage('Error saving design settings. Please try again.', error);
             });
     };
 
@@ -127,9 +114,12 @@ const PopupDesignTab = () => {
                 if (response.data.success && response.data.data) {
                     setDesignSettings({
                         title: response.data.data.title,
+                        titleFontSize: response.data.data.title_font_size,
                         description: response.data.data.description,
                         acceptButtonText: response.data.data.accept_button_text,
+                        acceptButtonRound: response.data.data.accept_button_round,
                         rejectButtonText: response.data.data.reject_button_text,
+                        rejectButtonRound: response.data.data.reject_button_round,
                         backgroundColor: response.data.data.background_color,
                         acceptButtonBgColor: response.data.data.accept_button_bg_color,
                         acceptButtonTextColor: response.data.data.accept_button_text_color,
@@ -137,7 +127,8 @@ const PopupDesignTab = () => {
                         rejectButtonTextColor: response.data.data.reject_button_text_color,
                         textColor: response.data.data.text_color,
                         fontFamily: response.data.data.font_family,
-                        fontSize: response.data.data.font_size
+                        fontSize: response.data.data.font_size,
+                        templateRound: response.data.data.template_round
                     });
                 }
             })
@@ -146,112 +137,223 @@ const PopupDesignTab = () => {
             });
     }, []);
 
+    const handleTemplateChange = (templateId) => {
+        console.log(templateId);
+        const selectedTemplate = templateDesignForPopUp.find((template) => template.id === templateId);
+        if (selectedTemplate) {
+            setDesignSettings((prevSettings) => ({
+                ...prevSettings,
+                ...selectedTemplate,
+            }));
+        }
+    }
+
     return (
         <Layout>
             <Layout.Section>
-                <FormLayout>
-                    <TextField
-                        label="Popup Title"
-                        value={designSettings.title}
-                        onChange={(value) => handleChange(value, 'title')}
-                    />
-                    <TextField
-                        label="Description"
-                        value={designSettings.description}
-                        onChange={(value) => handleChange(value, 'description')}
-                        multiline={3}
-                    />
-                    <div className="flex gap-4">
-                        <TextField
-                            label="Accept Button Text"
-                            value={designSettings.acceptButtonText}
-                            onChange={(value) => handleChange(value, 'acceptButtonText')}
-                        />
-                        {renderColorPicker('acceptButtonBgColor', 'Background Color')}
-                        {renderColorPicker('acceptButtonTextColor', 'Text Color')}
-                    </div>
-                    <div className="flex gap-4">
-                        <TextField
-                            label="Reject Button Text"
-                            value={designSettings.rejectButtonText}
-                            onChange={(value) => handleChange(value, 'rejectButtonText')}
-                        />
-                        {renderColorPicker('rejectButtonBgColor', 'Background Color')}
-                        {renderColorPicker('rejectButtonTextColor', 'Text Color')}
-                    </div>
-                    <Select
-                        label="Font Family"
-                        options={fontOptions}
-                        value={designSettings.fontFamily}
-                        onChange={(value) => handleChange(value, 'fontFamily')}
-                    />
-                    <Select
-                        label="Font Size"
-                        options={fontSizeOptions}
-                        value={designSettings.fontSize}
-                        onChange={(value) => handleChange(value, 'fontSize')}
-                    />
-                    <Select
-                        label="Popup Position"
-                        options={positionOptions}
-                        value={selectedPosition}
-                        onChange={(value) => setSelectedPosition(value)}
-                    />
-                    {renderColorPicker('backgroundColor', 'Choose Background Color')}
-                    {renderColorPicker('textColor', 'Choose Text Color')}
-                    <Button primary onClick={() => savePopDesignData()}>
-                        Save Pop Design
-                    </Button>
-                </FormLayout>
-                
-                <div className="mt-5">
-                    <div
-                        className="p-5 text-center rounded-lg shadow-2xl fixed z-50"
-                        style={{
-                            backgroundColor: `rgb(${designSettings.backgroundColor.red}, ${designSettings.backgroundColor.green}, ${designSettings.backgroundColor.blue})`,
-                            color: `rgb(${designSettings.textColor.red}, ${designSettings.textColor.green}, ${designSettings.textColor.blue})`,
-                            fontFamily: designSettings.fontFamily,
-                            fontSize: designSettings.fontSize,
-                            ...getPositionStyle(selectedPosition),
-                            width: 'auto',
-                            height: 'auto',
-                            maxWidth: '50%',
-                            maxHeight: '50%',
-                            overflow: 'auto',
-                        }}
-                    >
-                        <h2 className="mb-4">{designSettings.title || 'Your Title Here'}</h2>
-                        <p className="mb-5">{designSettings.description || 'Your description here'}</p>
-                        <div className="flex gap-2 justify-center">
-                            <button
-                                className="px-4 py-2 rounded"
-                                style={{
-                                    backgroundColor: `rgb(${designSettings.acceptButtonBgColor.red}, ${designSettings.acceptButtonBgColor.green}, ${designSettings.acceptButtonBgColor.blue})`,
-                                    color: `rgb(${designSettings.acceptButtonTextColor.red}, ${designSettings.acceptButtonTextColor.green}, ${designSettings.acceptButtonTextColor.blue})`,
-                                }}
-                            >
-                                {designSettings.acceptButtonText || 'Accept'}
-                            </button>
-                            <button
-                                className="px-4 py-2 rounded"
-                                style={{
-                                    backgroundColor: `rgb(${designSettings.rejectButtonBgColor.red}, ${designSettings.rejectButtonBgColor.green}, ${designSettings.rejectButtonBgColor.blue})`,
-                                    color: `rgb(${designSettings.rejectButtonTextColor.red}, ${designSettings.rejectButtonTextColor.green}, ${designSettings.rejectButtonTextColor.blue})`,
-                                }}
-                            >
-                                {designSettings.rejectButtonText || 'No, thanks'}
-                            </button>
+                {/* Container */}
+                <div className="max-w-4xl mx-auto space-y-6 p-6 bg-white rounded-lg shadow-sm">
+                    <FormLayout>
+                        {/* Templates Section */}
+                        <div className="mb-6">
+                            <h3 className="text-sm font-medium mb-1">Ready For You Templates</h3>
+                            <div className="flex gap-4">
+                                {themeViewColorSelector.map((gradient, index) => (
+                                    <div
+                                        key={index}
+                                        className={`w-12 h-12 rounded-full cursor-pointer ${index === 1 ? 'ring-2 ring-blue-500' : ''
+                                            } hover:scale-110 transition-transform duration-200`}
+                                        style={{
+                                            background: `linear-gradient(45deg, ${gradient.from}, ${gradient.to})`
+                                        }}
+                                        onClick={() => handleTemplateChange(index)}
+                                    />
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                </div>
+                        {/* Title Section */}
+                        <div className="grid grid-cols-2 gap-8">
+                            <TextField
+                                label="Title"
+                                value={designSettings.title}
+                                onChange={(value) => handleChange(value, 'title')}
+                            />
+                            <div className="px-6">
+                                <label className="block mb-4">{`Title Font Size: ${designSettings.titleFontSize ?? 10}px`}</label>
+                                <RangeSlider
+                                    output
+                                    min={10}
+                                    max={100}
+                                    step={1}
+                                    value={designSettings.titleFontSize ?? 10}
+                                    onChange={(value) => handleChange(value, 'titleFontSize')}
+                                />
+                            </div>
+                        </div>
 
+                        {/* Description Section */}
+                        <div className="mb-6">
+                            <TextField
+                                label="Description"
+                                value={designSettings.description}
+                                onChange={(value) => handleChange(value, 'description')}
+                                multiline={2} 
+                            />
+                        </div>
+
+                        {/* Font and Position Settings */}
+                        <div className="grid p-2 grid-cols-3 gap-4 mb-4">
+                            <Select
+                                label="Font Family"
+                                options={fontOptions}
+                                value={designSettings.fontFamily}
+                                onChange={(value) => handleChange(value, 'fontFamily')}
+                            />
+
+                            <div className="px-6">
+                                <label className="block mb-4">{`Font Size: ${designSettings.fontSize ?? 10}px`}</label>
+                                <RangeSlider
+                                    output
+                                    min={10}
+                                    max={100}
+                                    step={1}
+                                    value={designSettings.fontSize ?? 10}
+                                    onChange={(value) => handleChange(value, 'fontSize')}
+                                />
+                            </div>
+                            <div className="px-6">
+                                <label className="block mb-4">{`Popup Corner Radius: ${designSettings.templateRound ?? 1}px`}</label>
+                                <RangeSlider
+                                    output
+                                    min={0}
+                                    max={100}
+                                    step={1}
+                                    value={designSettings.templateRound ?? 1}
+                                    onChange={(value) => handleChange(value, 'templateRound')}
+                                />
+                            </div>
+
+                        </div>
+
+                        {/* Color Settings */}
+                        <div className=" p-4 mb-2">
+                            <div className="flex items-center gap-1">
+                                <div className="flex-1 mb-4">
+                                    <ColorPicker
+                                        type="backgroundColor"
+                                        label="Background Color"
+                                        color={designSettings.backgroundColor}
+                                        onColorChange={handleColorChange}
+                                    />
+                                </div>
+                                <div className="flex-1 mb-4">
+                                    <ColorPicker
+                                        type="textColor"
+                                        label="Text Color"
+                                        color={designSettings.textColor}
+                                        onColorChange={handleColorChange}
+                                    />
+                                </div>
+                                <div className="flex-1">
+                                    <Select
+                                        label="Popup Position"
+                                        options={positionOptions}
+                                        value={selectedPosition}
+                                        onChange={(value) => setSelectedPosition(value)}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Accept Button Section */}
+                        <div className="p-4 rounded-lg mb-1">
+                            <div className="grid grid-cols-2 gap-4">
+                                {/* Accept Button Section - Left */}
+                                <div className="bg-gray-100 p-4 rounded-lg">
+                                    <h3 className="text-sm font-bold mb-1">Accept Button Settings</h3>
+                                    <div className=" grid grid-cols-1 gap-4">
+                                        <TextField
+                                            label="Button Text"
+                                            value={designSettings.acceptButtonText}
+                                            onChange={(value) => handleChange(value, 'acceptButtonText')}
+                                        />
+                                        <ColorPicker
+                                            type="acceptButtonBgColor"
+                                            label="Button Color"
+                                            color={designSettings.acceptButtonBgColor}
+                                            onColorChange={handleColorChange}
+                                        />
+                                        <ColorPicker
+                                            type="acceptButtonTextColor"
+                                            label="Text Color"
+                                            color={designSettings.acceptButtonTextColor}
+                                            onColorChange={handleColorChange}
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Reject Button Section - Right */}
+                                <div className="p-4 bg-gray-100 rounded-lg">
+                                    <h3 className="text-sm font-bold mb-1">Reject Button Settings</h3>
+                                    <div className="grid grid-cols-1 gap-4">
+                                        <TextField
+                                            label="Button Text"
+                                            value={designSettings.rejectButtonText}
+                                            onChange={(value) => handleChange(value, 'rejectButtonText')}
+                                        />
+                                        <ColorPicker
+                                            type="rejectButtonBgColor"
+                                            label="Button Color"
+                                            color={designSettings.rejectButtonBgColor}
+                                            onColorChange={handleColorChange}
+                                        />
+                                        <ColorPicker
+                                            type="rejectButtonTextColor"
+                                            label="Text Color"
+                                            color={designSettings.rejectButtonTextColor}
+                                            onColorChange={handleColorChange}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Round Section - Centered Below */}
+                            <div className="px-6">
+                                <label className="block mb-4">{`Button Radius: ${designSettings.rejectButtonRound ?? 0}px`}</label>
+                                <RangeSlider
+                                    output
+                                    min={0}
+                                    max={100}
+                                    step={1}
+                                    value={designSettings.rejectButtonRound ?? 0}
+                                    onChange={(value) => handleChange(value, 'rejectButtonRound')}
+                                />
+                            </div>
+                        </div>
+
+                        {/* Save Button */}
+                        <div className="flex justify-start">
+                            <Button
+                                primary
+                                onClick={savePopDesignData}
+                                className="px-6 py-2"
+                            >
+                                Save Pop Design
+                            </Button>
+                        </div>
+                    </FormLayout>
+                    {/* Popup Preview */}
+                    <Popup designSettings={designSettings} selectedPosition={selectedPosition} />
+                </div>
             </Layout.Section>
+
+            {/* Toast Notification */}
             {toastMessage && (
                 <Toast content={toastMessage} onDismiss={() => setToastMessage('')} />
             )}
         </Layout>
-
     );
+
 };
 
 export default PopupDesignTab;

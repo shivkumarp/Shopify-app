@@ -1,4 +1,4 @@
-(async function() {
+(async function () {
     // Get user_id from script URL
     const scriptTag = document.currentScript;
     const scriptUrl = new URL(scriptTag.src);
@@ -8,7 +8,7 @@
     async function loadAgeVerification(userId) {
         try {
             // Fetch settings from API
-            const response = await fetch(`https://codeoink.com/api/settings/${userId}`, { 
+            const response = await fetch(`https://codeoink.com/api/settings/${userId}`, {
                 method: 'GET',
                 mode: 'cors',
                 credentials: 'include',
@@ -41,7 +41,7 @@
             }
 
             // Exit if popup is disabled or consent already given
-            if (!ageSettings ?.popup_enabled || checkAgeConsent()) {
+            if (!ageSettings?.popup_enabled || checkAgeConsent()) {
                 console.log('Popup disabled or consent already given');
                 return;
             }
@@ -83,49 +83,64 @@
                 display: block;
                 `;
 
+                const descriptionText = designSettings.description || 'Please verify your age to continue.';
+
                 // Modal content (child) container
                 const modalContent = document.createElement('div');
                 modalContent.style.cssText = `
-                position: absolute;
-                ${positionStyles}
-                background-color: rgb(${designSettings.background_color.red}, ${designSettings.background_color.green}, ${designSettings.background_color.blue});
-                color: rgb(${designSettings.text_color.red}, ${designSettings.text_color.green}, ${designSettings.text_color.blue});
-                padding: 20px;
-                border-radius: 8px;
-                max-width: 500px;
-                width: 90%;
-                text-align: center;
-                font-family: ${designSettings.font_family};
-                font-size: ${designSettings.font_size};
+                    position: absolute;
+                    ${positionStyles}
+                    background-color: rgb(${designSettings.background_color.red}, ${designSettings.background_color.green}, ${designSettings.background_color.blue});
+                    color: rgb(${designSettings.text_color.red}, ${designSettings.text_color.green}, ${designSettings.text_color.blue});
+                    padding: 20px;
+                    border-radius: ${designSettings.template_round || 8}px; /* Dynamic modal radius */
+                    max-width: 720px;
+                    width: 90%;
+                    text-align: center;
+                    font-family: ${designSettings.font_family};
+                    font-size: ${designSettings.font_size}px;
                 `;
 
                 modalContent.innerHTML = `
-                <h2>${designSettings.title || 'Age Verification'}</h2>
-                <p>${designSettings.description || 'Please verify your age to continue.'}</p>
-                <div>
-                <button id="confirmAge" style="
-                 background-color: rgb(${designSettings.accept_button_bg_color.red}, ${designSettings.accept_button_bg_color.green}, ${designSettings.accept_button_bg_color.blue});
-                 color: rgb(${designSettings.accept_button_text_color.red}, ${designSettings.accept_button_text_color.green}, ${designSettings.accept_button_text_color.blue});
-                 padding: 10px 20px;
-                 border: none;
-                 border-radius: 5px;
-                 cursor: pointer;
-                 margin-right: 10px;
-                 ">
-                 ${designSettings.accept_button_text || 'Confirm'}
-                 </button>
-                 <button id="rejectAge" style="
-                 background-color: rgb(${designSettings.reject_button_bg_color.red}, ${designSettings.reject_button_bg_color.green}, ${designSettings.reject_button_bg_color.blue});
-                 color: rgb(${designSettings.reject_button_text_color.red}, ${designSettings.reject_button_text_color.green}, ${designSettings.reject_button_text_color.blue});
-                 padding: 10px 20px;
-                 border: none;
-                 border-radius: 5px;
-                 cursor: pointer;
-                 ">
-                 ${designSettings.reject_button_text || 'Reject'}
-                 </button>
-                 </div>
-                 `;
+                    <h2 style="
+                        font-size: ${designSettings.title_font_size || 24}px; /* Dynamic title font size */
+                        margin-bottom: 10px;
+                    ">
+                        ${designSettings.title || 'Age Verification'}
+                    </h2>
+                    <p style="
+                    font-size: ${designSettings.font_size || 16}px; /* Dynamic description font size */
+                     margin-bottom: 20px;
+                     ">
+                     ${descriptionText.replace(/\n/g, '<br/>')} <!-- Replace newlines with <br> -->
+                     </p>
+                    <div>
+                        <button id="confirmAge" style="
+                            background-color: rgb(${designSettings.accept_button_bg_color.red}, ${designSettings.accept_button_bg_color.green}, ${designSettings.accept_button_bg_color.blue});
+                            color: rgb(${designSettings.accept_button_text_color.red}, ${designSettings.accept_button_text_color.green}, ${designSettings.accept_button_text_color.blue});
+                            padding: 10px 20px;
+                            border: none;
+                            border-radius: ${designSettings.accept_button_round || 8}px; /* Dynamic button radius */
+                            cursor: pointer;
+                            font-size: ${designSettings.font_size || 16}px; /* Dynamic button font size */
+                            margin-right: 10px;
+                        ">
+                            ${designSettings.accept_button_text || 'Confirm'}
+                        </button>
+                        <button id="rejectAge" style="
+                            background-color: rgb(${designSettings.reject_button_bg_color.red}, ${designSettings.reject_button_bg_color.green}, ${designSettings.reject_button_bg_color.blue});
+                            color: rgb(${designSettings.reject_button_text_color.red}, ${designSettings.reject_button_text_color.green}, ${designSettings.reject_button_text_color.blue});
+                            padding: 10px 20px;
+                            border: none;
+                            border-radius: ${designSettings.reject_button_round || 8}px; /* Dynamic button radius */
+                            cursor: pointer;
+                            font-size: ${designSettings.font_size || 16}px; /* Dynamic button font size */
+                        ">
+                            ${designSettings.reject_button_text || 'Reject'}
+                        </button>
+                    </div>
+                `;
+
 
                 document.body.appendChild(modal);
                 modal.appendChild(modalContent);
