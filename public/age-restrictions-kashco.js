@@ -172,7 +172,7 @@
                             justify-content: center;
                             align-items: center;
                             background-color:rgba(0, 0, 0, 1);
-                            z-index: 999999;
+                            z-index: 9;
                         `;
                         document.body.appendChild(overlay);
                     } else if (ageSettings.validation_type === 'redirect') {
