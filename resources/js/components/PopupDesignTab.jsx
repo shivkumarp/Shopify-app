@@ -258,7 +258,7 @@ const PopupDesignTab = () => {
                                     <Select
                                         label="Popup Position"
                                         options={positionOptions}
-                                        value={'bottom-right'}
+                                        value={selectedPosition}
                                         onChange={(value) => setSelectedPosition(value)}
                                     />
                                 </div>
