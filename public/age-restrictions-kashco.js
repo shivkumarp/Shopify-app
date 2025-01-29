@@ -172,6 +172,7 @@
                             display: flex;
                             justify-content: center;
                             align-items: center;
+                            background-color:rgba(0, 0, 0, 1);
                         `;
                         document.body.appendChild(overlay);
                     } else if (ageSettings.validation_type === 'redirect') {
