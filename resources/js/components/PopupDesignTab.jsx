@@ -186,11 +186,11 @@ const PopupDesignTab = () => {
                         {/* Templates Section */}
                         <div className="mb-6">
                             <h3 className="text-sm font-medium mb-1">Ready For You Templates</h3>
-                            <div className="flex gap-2 mb-2 border hover:border-black">
+                            <div className="flex gap-2 mb-2 ">
                                 {themeViewColorSelector.map((gradient, index) => (
                                     <div
                                         key={index}
-                                        className={`w-10 h-5 rounded-sm cursor-pointer`}
+                                        className={`w-10 h-5 rounded-sm cursor-pointer hover:border-black`}
                                         style={{
                                             background: `linear-gradient(to right, ${gradient.from} 0,${gradient.from} 33.333%, ${gradient.middle} 33.333%,${gradient.middle} 66.666%, ${gradient.to} 66.666%,${gradient.to} 100%)`
                                         }}
