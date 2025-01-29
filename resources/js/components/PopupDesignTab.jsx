@@ -130,6 +130,7 @@ const PopupDesignTab = () => {
                         fontSize: response.data.data.font_size || 13,
                         templateRound: response.data.data.template_round || 4
                     });
+                    setSelectedPosition(response.data.data.position || 'bottom-right');
                 } else {
                     saveDefaultSettings();
                 }
