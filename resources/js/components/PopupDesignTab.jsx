@@ -21,22 +21,22 @@ const PopupDesignTab = () => {
 
     const [selectedPosition, setSelectedPosition] = useState('bottom-right');
     const [designSettings, setDesignSettings] = useState({
-        title: 'Title',
+        title: 'Age Verification',
         titleFontSize: 18,
-        description: 'Description',
+        description: 'You must be 18 years or older to access this website. <br/>Please confirm your age.',
         acceptButtonText: 'Yes, I\'m over 18.',
-        acceptButtonRound: 0,
+        acceptButtonRound: 4,
         rejectButtonText: 'No, I\'m under 18.',
-        rejectButtonRound: 0,
+        rejectButtonRound: 4,
         backgroundColor: { red: 255, green: 255, blue: 255 },
-        acceptButtonBgColor: { red: 255, green: 255, blue: 255 },
-        acceptButtonTextColor: { red: 0, green: 0, blue: 0 },
-        rejectButtonBgColor: { red: 255, green: 255, blue: 255 },
-        rejectButtonTextColor: { red: 0, green: 0, blue: 0 },
+        acceptButtonBgColor: { red: 255, green: 0, blue: 4 },
+        acceptButtonTextColor: { red: 255, green: 255, blue: 255 },
+        rejectButtonBgColor: { red: 17, green: 17, blue: 17 },
+        rejectButtonTextColor: { red: 255, green: 255, blue: 255 },
         textColor: { red: 0, green: 0, blue: 0 },
-        fontFamily: 'Arial',
+        fontFamily: 'Open Sans',
         fontSize: 13,
-        templateRound: 0
+        templateRound: 4
     });
 
     useEffect(() => {

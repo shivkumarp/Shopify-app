@@ -111,6 +111,7 @@
                     <p style="
                     font-size: ${designSettings.font_size || 16}px; /* Dynamic description font size */
                      margin-bottom: 20px;
+                     letter-spacing:0;
                      ">
                      ${descriptionText.replace(/\n/g, '<br/>')} 
                      </p>
@@ -124,6 +125,7 @@
                             cursor: pointer;
                             font-size: ${designSettings.font_size || 16}px; /* Dynamic button font size */
                             margin-right: 10px;
+                            font-weight:bold;
                         ">
                             ${designSettings.accept_button_text || 'Confirm'}
                         </button>
