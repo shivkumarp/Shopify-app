@@ -8,7 +8,7 @@
     async function loadAgeVerification(userId) {
         try {
             // Fetch settings from API
-            const response = await fetch(`https://codeoink.com/api/settings/${userId}`, {
+            const response = await fetch(`https://ageverifier.zo-apps.com/api/settings/${userId}`, {
                 method: 'GET',
                 mode: 'cors',
                 credentials: 'include',
