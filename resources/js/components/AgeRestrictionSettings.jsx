@@ -78,6 +78,7 @@ const AgeRestrictionSettings = () => {
         Promise.all([saveSettingsApi, uploadScriptApi])
             .then(() => {
                 console.log(saveSettingsApi, uploadScriptApi)
+                setSettings(saveSettingsApi);
                 setToastMessage('Settings saved successfully');
             })
             .catch((error) => {

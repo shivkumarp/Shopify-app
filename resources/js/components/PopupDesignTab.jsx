@@ -153,7 +153,8 @@ const PopupDesignTab = () => {
                             textColor: response.data.data.text_color,
                             fontFamily: response.data.data.font_family,
                             fontSize: response.data.data.font_size,
-                            templateRound: response.data.data.template_round
+                            templateRound: response.data.data.template_round,
+                            selectedPosition: response.data.data.position
                         });
                     })
                     .catch(error => {
