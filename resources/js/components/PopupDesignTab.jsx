@@ -190,10 +190,10 @@ const PopupDesignTab = () => {
                                 {themeViewColorSelector.map((gradient, index) => (
                                     <div
                                         key={index}
-                                        className={`w-10 h-10 rounded-lg cursor-pointer ${index === 1 ? 'ring-2 ring-blue-500' : ''
+                                        className={`w-10 h-5 rounded-sm cursor-pointer ${index === 1 ? 'ring-2 ring-blue-500' : ''
                                             } hover:scale-110 transition-transform duration-200`}
                                         style={{
-                                            background: `linear-gradient(45deg, ${gradient.from}, ${gradient.middle}, ${gradient.to})`
+                                            background: `linear-gradient(to right, ${gradient.from} 0,${gradient.from} 33.333%, ${gradient.middle} 33.333%,${gradient.middle} 66.666%, ${gradient.to} 66.666%,${gradient.to} 100%)`
                                         }}
                                         onClick={() => handleTemplateChange(index)}
                                     />
