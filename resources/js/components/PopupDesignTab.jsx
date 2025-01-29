@@ -111,64 +111,68 @@ const PopupDesignTab = () => {
     useEffect(() => {
         axios.get('/get-pop-design-data')
             .then(response => {
-                if (response.data.success && response.data.data) {
+                console.log("API Response:", response.data);
+
+                if (response.data.success && response.data.data && Object.keys(response.data.data).length > 0) {
                     setDesignSettings({
-                        title: response.data.data.title,
-                        titleFontSize: response.data.data.title_font_size,
-                        description: response.data.data.description,
-                        acceptButtonText: response.data.data.accept_button_text,
-                        acceptButtonRound: response.data.data.accept_button_round,
-                        rejectButtonText: response.data.data.reject_button_text,
-                        rejectButtonRound: response.data.data.reject_button_round,
-                        backgroundColor: response.data.data.background_color,
-                        acceptButtonBgColor: response.data.data.accept_button_bg_color,
-                        acceptButtonTextColor: response.data.data.accept_button_text_color,
-                        rejectButtonBgColor: response.data.data.reject_button_bg_color,
-                        rejectButtonTextColor: response.data.data.reject_button_text_color,
-                        textColor: response.data.data.text_color,
-                        fontFamily: response.data.data.font_family,
-                        fontSize: response.data.data.font_size,
-                        templateRound: response.data.data.template_round
+                        title: response.data.data.title || "",
+                        titleFontSize: response.data.data.title_font_size || "",
+                        description: response.data.data.description || "",
+                        acceptButtonText: response.data.data.accept_button_text || "",
+                        acceptButtonRound: response.data.data.accept_button_round || false,
+                        rejectButtonText: response.data.data.reject_button_text || "",
+                        rejectButtonRound: response.data.data.reject_button_round || false,
+                        backgroundColor: response.data.data.background_color || "#ffffff",
+                        acceptButtonBgColor: response.data.data.accept_button_bg_color || "#000000",
+                        acceptButtonTextColor: response.data.data.accept_button_text_color || "#ffffff",
+                        rejectButtonBgColor: response.data.data.reject_button_bg_color || "#000000",
+                        rejectButtonTextColor: response.data.data.reject_button_text_color || "#ffffff",
+                        textColor: response.data.data.text_color || "#000000",
+                        fontFamily: response.data.data.font_family || "Arial",
+                        fontSize: response.data.data.font_size || "16px",
+                        templateRound: response.data.data.template_round || false
                     });
                 } else {
-                    const defaltDesignData = {
-                        title: designSettings.title,
-                        title_font_size: designSettings.titleFontSize,
-                        description: designSettings.description,
-                        accept_button_text: designSettings.acceptButtonText,
-                        accept_button_round: designSettings.rejectButtonRound,
-                        accept_button_text_color: JSON.stringify(designSettings.acceptButtonTextColor),
-                        accept_button_bg_color: JSON.stringify(designSettings.acceptButtonBgColor),
-                        reject_button_text: designSettings.rejectButtonText,
-                        reject_button_round: designSettings.rejectButtonRound,
-                        reject_button_text_color: JSON.stringify(designSettings.rejectButtonTextColor),
-                        reject_button_bg_color: JSON.stringify(designSettings.rejectButtonBgColor),
-                        background_color: JSON.stringify(designSettings.backgroundColor),
-                        text_color: JSON.stringify(designSettings.textColor),
-                        font_family: designSettings.fontFamily,
-                        font_size: designSettings.fontSize,
-                        position: selectedPosition,
-                        template_round: designSettings.templateRound
-                    };
+                    console.log("No data found, saving default settings...");
 
+                    const defaltDesignData = {
+                        title: designSettings.title || "Default Title",
+                        title_font_size: designSettings.titleFontSize || "16px",
+                        description: designSettings.description || "Default Description",
+                        accept_button_text: designSettings.acceptButtonText || "Accept",
+                        accept_button_round: designSettings.acceptButtonRound || false,
+                        accept_button_text_color: JSON.stringify(designSettings.acceptButtonTextColor || "#ffffff"),
+                        accept_button_bg_color: JSON.stringify(designSettings.acceptButtonBgColor || "#000000"),
+                        reject_button_text: designSettings.rejectButtonText || "Reject",
+                        reject_button_round: designSettings.rejectButtonRound || false,
+                        reject_button_text_color: JSON.stringify(designSettings.rejectButtonTextColor || "#ffffff"),
+                        reject_button_bg_color: JSON.stringify(designSettings.rejectButtonBgColor || "#000000"),
+                        background_color: JSON.stringify(designSettings.backgroundColor || "#ffffff"),
+                        text_color: JSON.stringify(designSettings.textColor || "#000000"),
+                        font_family: designSettings.fontFamily || "Arial",
+                        font_size: designSettings.fontSize || "16px",
+                        position: selectedPosition || "bottom-right",
+                        template_round: designSettings.templateRound || false
+                    };
 
                     axios.post('/save-pop-design-data', defaltDesignData)
                         .then((response) => {
-                            console.log(response);
+                            console.log("Saved Default Data:", response);
                             setLoading(false);
-                            setToastMessage('Design settings saved successfully!');
+                            setToastMessage('Default design settings saved successfully!');
                         })
                         .catch((error) => {
                             setLoading(false);
-                            setToastMessage('Error saving design settings. Please try again.', error);
+                            console.error("Error saving default settings:", error);
+                            setToastMessage('Error saving design settings. Please try again.');
                         });
                 }
             })
             .catch(error => {
                 console.error('Error fetching design settings:', error);
             });
-    }, []);
 
+    }, []);
 
     const handleTemplateChange = (templateId) => {
         console.log(templateId);
