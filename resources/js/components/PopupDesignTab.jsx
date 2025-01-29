@@ -19,7 +19,7 @@ const PopupDesignTab = () => {
         rejectButtonTextColor: false
     });
 
-    const [selectedPosition, setSelectedPosition] = useState('top-right');
+    const [selectedPosition, setSelectedPosition] = useState('bottom-right');
     const [designSettings, setDesignSettings] = useState({
         title: 'Title',
         titleFontSize: "14",
