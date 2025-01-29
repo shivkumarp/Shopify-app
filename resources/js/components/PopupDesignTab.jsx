@@ -109,61 +109,59 @@ const PopupDesignTab = () => {
     };
 
     useEffect(() => {
-        axios.get('/get-pop-design-data')
-            .then(response => {
-                if (response.data.success && response.data.data) {
-                    setDesignSettings({
-                        title: response.data.data.title,
-                        titleFontSize: response.data.data.title_font_size,
-                        description: response.data.data.description,
-                        acceptButtonText: response.data.data.accept_button_text,
-                        acceptButtonRound: response.data.data.accept_button_round,
-                        rejectButtonText: response.data.data.reject_button_text,
-                        rejectButtonRound: response.data.data.reject_button_round,
-                        backgroundColor: response.data.data.background_color,
-                        acceptButtonBgColor: response.data.data.accept_button_bg_color,
-                        acceptButtonTextColor: response.data.data.accept_button_text_color,
-                        rejectButtonBgColor: response.data.data.reject_button_bg_color,
-                        rejectButtonTextColor: response.data.data.reject_button_text_color,
-                        textColor: response.data.data.text_color,
-                        fontFamily: response.data.data.font_family,
-                        fontSize: response.data.data.font_size,
-                        templateRound: response.data.data.template_round
-                    });
-                } else {
-                    const defaultData = {
-                        title: designSettings.title,
-                        title_font_size: designSettings.titleFontSize,
-                        description: designSettings.description,
-                        accept_button_text: designSettings.acceptButtonText,
-                        accept_button_round: designSettings.acceptButtonRound,
-                        reject_button_text: designSettings.rejectButtonText,
-                        reject_button_round: designSettings.rejectButtonRound,
-                        background_color: JSON.stringify(designSettings.backgroundColor),
-                        accept_button_bg_color: JSON.stringify(designSettings.acceptButtonBgColor),
-                        accept_button_text_color: JSON.stringify(designSettings.acceptButtonTextColor),
-                        reject_button_bg_color: JSON.stringify(designSettings.rejectButtonBgColor),
-                        reject_button_text_color: JSON.stringify(designSettings.rejectButtonTextColor),
-                        text_color: JSON.stringify(designSettings.textColor),
-                        font_family: designSettings.fontFamily,
-                        font_size: designSettings.fontSize,
-                        template_round: designSettings.templateRound
-                    };
-                    console.log(defaultData);
+        // First save the default settings
+        const defaultData = {
+            title: designSettings.title,
+            title_font_size: designSettings.titleFontSize,
+            description: designSettings.description,
+            accept_button_text: designSettings.acceptButtonText,
+            accept_button_round: designSettings.acceptButtonRound,
+            reject_button_text: designSettings.rejectButtonText,
+            reject_button_round: designSettings.rejectButtonRound,
+            background_color: JSON.stringify(designSettings.backgroundColor),
+            accept_button_bg_color: JSON.stringify(designSettings.acceptButtonBgColor),
+            accept_button_text_color: JSON.stringify(designSettings.acceptButtonTextColor),
+            reject_button_bg_color: JSON.stringify(designSettings.rejectButtonBgColor),
+            reject_button_text_color: JSON.stringify(designSettings.rejectButtonTextColor),
+            text_color: JSON.stringify(designSettings.textColor),
+            font_family: designSettings.fontFamily,
+            font_size: designSettings.fontSize,
+            template_round: designSettings.templateRound
+        };
 
-                    axios.post('/save-pop-design-data', defaultData)
-                        .then((saveResponse) => {
-                            console.log('Default settings saved successfully');
-                            setToastMessage('Default design settings applied successfully!');
-                        })
-                        .catch((error) => {
-                            console.error('Error saving default settings:', error);
-                            setToastMessage('Error applying default settings. Please try again.');
+        // Save default settings first
+        axios.post('/save-pop-design-data', defaultData)
+            .then((saveResponse) => {
+                console.log('Default settings saved successfully');
+
+                axios.get('/get-pop-design-data')
+                    .then(response => {
+                        setDesignSettings({
+                            title: response.data.data.title,
+                            titleFontSize: response.data.data.title_font_size,
+                            description: response.data.data.description,
+                            acceptButtonText: response.data.data.accept_button_text,
+                            acceptButtonRound: response.data.data.accept_button_round,
+                            rejectButtonText: response.data.data.reject_button_text,
+                            rejectButtonRound: response.data.data.reject_button_round,
+                            backgroundColor: response.data.data.background_color,
+                            acceptButtonBgColor: response.data.data.accept_button_bg_color,
+                            acceptButtonTextColor: response.data.data.accept_button_text_color,
+                            rejectButtonBgColor: response.data.data.reject_button_bg_color,
+                            rejectButtonTextColor: response.data.data.reject_button_text_color,
+                            textColor: response.data.data.text_color,
+                            fontFamily: response.data.data.font_family,
+                            fontSize: response.data.data.font_size,
+                            templateRound: response.data.data.template_round
                         });
-                }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching design settings:', error);
+                    });
             })
-            .catch(error => {
-                console.error('Error fetching design settings:', error);
+            .catch((error) => {
+                console.error('Error saving default settings:', error);
+                setToastMessage('Error applying default settings. Please try again.');
             });
     }, []);
 
