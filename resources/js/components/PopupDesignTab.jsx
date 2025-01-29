@@ -186,27 +186,13 @@ const PopupDesignTab = () => {
                         {/* Templates Section */}
                         <div className="mb-6">
                             <h3 className="text-sm font-medium mb-1">Ready For You Templates</h3>
-                            <div className="flex gap-2 mb-2">
+                            <div className="flex gap-2 mb-2 border hover:border-black">
                                 {themeViewColorSelector.map((gradient, index) => (
                                     <div
                                         key={index}
-                                        className={`w-10 h-5 rounded-sm cursor-pointer ${index === 1 ? 'ring-2 ring-blue-500' : ''
-                                            } hover:scale-110 transition-transform duration-200`}
+                                        className={`w-10 h-5 rounded-sm cursor-pointer`}
                                         style={{
                                             background: `linear-gradient(to right, ${gradient.from} 0,${gradient.from} 33.333%, ${gradient.middle} 33.333%,${gradient.middle} 66.666%, ${gradient.to} 66.666%,${gradient.to} 100%)`
-                                        }}
-                                        onClick={() => handleTemplateChange(index)}
-                                    />
-                                ))}
-                            </div>
-                            <div className="flex gap-2 mt-2">
-                                {themeViewColorSelector.map((gradient, index) => (
-                                    <div
-                                        key={index}
-                                        className={`w-10 h-10 rounded-full cursor-pointer ${index === 1 ? 'ring-2 ring-blue-500' : ''
-                                            } hover:scale-110 transition-transform duration-200`}
-                                        style={{
-                                            background: `linear-gradient(45deg, ${gradient.from}, ${gradient.middle}, ${gradient.to})`
                                         }}
                                         onClick={() => handleTemplateChange(index)}
                                     />
