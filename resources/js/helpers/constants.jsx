@@ -141,40 +141,46 @@ const rgbToHex = (r, g, b) => {
 };
 
 export const themeViewColorSelector = [
- 
+    // Template 0
     {
-        from: rgbToHex(255, 0, 4),      // Red accept button
-        to: rgbToHex(17, 17, 17)        // Black reject button
+        from: rgbToHex(255, 0, 4),        // Red accept button
+        middle: rgbToHex(255, 255, 255),   // White background
+        to: rgbToHex(17, 17, 17)          // Black reject button
     },
-    // Template 1: Pink to yellow
+    // Template 1
     {
-        from: rgbToHex(239, 71, 111),   // Pink accept button
-        to: rgbToHex(255, 209, 102)     // Yellow reject button
+        from: rgbToHex(239, 71, 111),     // Pink accept button
+        middle: rgbToHex(38, 84, 124),     // Blue background
+        to: rgbToHex(255, 209, 102)       // Yellow reject button
     },
-    // Template 2: Green to black
+    // Template 2
     {
-        from: rgbToHex(1, 154, 11),     // Green accept button
-        to: rgbToHex(34, 34, 34)        // Black reject button
+        from: rgbToHex(1, 154, 11),       // Green accept button
+        middle: rgbToHex(255, 255, 255),   // White background
+        to: rgbToHex(34, 34, 34)          // Black reject button
     },
-    // Template 3: Dark red to brown
+    // Template 3
     {
-        from: rgbToHex(163, 46, 65),    // Dark red accept button
-        to: rgbToHex(120, 100, 82)      // Brown reject button
+        from: rgbToHex(163, 46, 65),      // Dark red accept button
+        middle: rgbToHex(68, 55, 48),      // Brown background
+        to: rgbToHex(120, 100, 82)        // Brown reject button
     },
-    // Template 4: Green to white
+    // Template 4
     {
-        from: rgbToHex(62, 237, 74),    // Green accept button
-        to: rgbToHex(255, 255, 255)     // White reject button
+        from: rgbToHex(62, 237, 74),      // Green accept button
+        middle: rgbToHex(0, 0, 0),         // Black background
+        to: rgbToHex(255, 255, 255)       // White reject button
     },
-    // Template 5: Black to white
+    // Template 5
     {
-        from: rgbToHex(17, 17, 17),     // Black accept button
-        to: rgbToHex(255, 255, 255)     // White reject button
+        from: rgbToHex(17, 17, 17),       // Black accept button
+        middle: rgbToHex(31, 176, 166),    // Turquoise background
+        to: rgbToHex(255, 255, 255)       // White reject button
     },
-    // Template 6: Dark brown to light beige
+    // Template 6
     {
-        from: rgbToHex(75, 66, 55),     // Dark brown accept button
-        to: rgbToHex(237, 231, 217)     // Light beige reject button
+        from: rgbToHex(75, 66, 55),       // Dark brown accept button
+        middle: rgbToHex(213, 160, 33),    // Golden background
+        to: rgbToHex(237, 231, 217)       // Light beige reject button
     }
 ];
-
