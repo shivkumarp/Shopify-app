@@ -22,7 +22,7 @@ const PopupDesignTab = () => {
     const [selectedPosition, setSelectedPosition] = useState('top-right');
     const [designSettings, setDesignSettings] = useState({
         title: 'Title',
-        titleFontSize: "14px",
+        titleFontSize: "14",
         description: 'Description',
         acceptButtonText: 'I am 18+ Years old.',
         acceptButtonRound: 4,
@@ -35,7 +35,7 @@ const PopupDesignTab = () => {
         rejectButtonTextColor: { red: 0, green: 0, blue: 0 },
         textColor: { red: 0, green: 0, blue: 0 },
         fontFamily: 'Arial',
-        fontSize: "14px",
+        fontSize: "14",
         templateRound: 4
     });
 
