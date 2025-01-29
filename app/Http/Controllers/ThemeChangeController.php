@@ -114,7 +114,7 @@ class ThemeChangeController extends Controller
             
             $variables = [
                 'input' => [
-                    'src' => "https://ageverifier.zo-apps.com/age-restrictions-kashco.js?user_id={$shop->id}",
+                    'src' => "https://codeoink.com/age-restrictions-kashco.js?user_id={$shop->id}",
                     'displayScope' => 'ONLINE_STORE',
                     'cache' => false
                 ]
@@ -165,7 +165,7 @@ class ThemeChangeController extends Controller
         $variables = [
             'id' => "gid://shopify/ScriptTag/{$existingScript->script_tag_id}",
             'input' => [
-                'src' => "https://ageverifier.zo-apps.com/age-restrictions-kashco.js?user_id={$shop->id}"
+                'src' => "https://codeoink.com/age-restrictions-kashco.js?user_id={$shop->id}"
             ]
         ];
 
