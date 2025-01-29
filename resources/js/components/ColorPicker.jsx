@@ -2,7 +2,7 @@ import { Button } from '@shopify/polaris';
 import React, { useState } from 'react';
 import { ChromePicker } from 'react-color';
 
-const ColorPicker = ({ type, label, color, onColorChange }) => {
+const ColorPicker = ({ type, label, color = { red: 0, green: 0, blue: 0 }, onColorChange }) => {
     const [isPickerVisible, setPickerVisible] = useState(false);
 
     const togglePicker = () => setPickerVisible((prev) => !prev);
