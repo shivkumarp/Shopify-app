@@ -69,7 +69,6 @@ export const pageViewTypes = [
 export const templateDesignForPopUp = [
     {
         id: 0,
-        title: 'Customize Template',
         backgroundColor: { red: 255, green: 255, blue: 255 },
         acceptButtonBgColor: { red: 0, green: 128, blue: 0 },
         acceptButtonTextColor: { red: 255, green: 255, blue: 255 },
@@ -79,7 +78,6 @@ export const templateDesignForPopUp = [
     },
     {
         id: 2,
-        title: 'Dark Mode Template',
         backgroundColor: { red: 34, green: 34, blue: 34 },
         acceptButtonBgColor: { red: 0, green: 128, blue: 128 },
         acceptButtonTextColor: { red: 255, green: 255, blue: 255 },
@@ -89,7 +87,6 @@ export const templateDesignForPopUp = [
     },
     {
         id: 1,
-        title: 'Minimal Template',
         backgroundColor: { red: 240, green: 240, blue: 240 },
         acceptButtonBgColor: { red: 60, green: 179, blue: 113 },
         acceptButtonTextColor: { red: 255, green: 255, blue: 255 },
@@ -99,7 +96,6 @@ export const templateDesignForPopUp = [
     },
     {
         id: 3,
-        title: 'Light Mode Template',
         backgroundColor: { red: 248, green: 248, blue: 255 },
         acceptButtonBgColor: { red: 75, green: 0, blue: 130 },
         acceptButtonTextColor: { red: 255, green: 255, blue: 255 },
@@ -109,7 +105,6 @@ export const templateDesignForPopUp = [
     },
     {
         id: 4,
-        title: 'Nature Template',
         backgroundColor: { red: 255, green: 255, blue: 255 },
         acceptButtonBgColor: { red: 34, green: 139, blue: 34 },
         acceptButtonTextColor: { red: 255, green: 255, blue: 255 },
@@ -119,7 +114,6 @@ export const templateDesignForPopUp = [
     },
     {
         id: 5,
-        title: 'Sunset Template',
         backgroundColor: { red: 255, green: 255, blue: 255 },
         acceptButtonBgColor: { red: 255, green: 165, blue: 0 },
         acceptButtonTextColor: { red: 255, green: 255, blue: 255 },
