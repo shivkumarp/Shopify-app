@@ -104,7 +104,7 @@
                 modalContent.innerHTML = `
                     <h2 style="
                         font-size: ${designSettings.title_font_size || 24}px; /* Dynamic title font size */
-                        margin-bottom: 10px;
+                        margin: 0 0 10px 0;
                         font-weight:bold;
                     ">
                         ${designSettings.title || 'Age Verification'}
@@ -113,7 +113,7 @@
                     font-size: ${designSettings.font_size || 16}px; /* Dynamic description font size */
                      margin-bottom: 20px;
                      letter-spacing:0;
-                     
+
                      ">
                      ${descriptionText.replace(/\n/g, '<br/>')} 
                      </p>
