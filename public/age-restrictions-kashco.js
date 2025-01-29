@@ -105,6 +105,7 @@
                     <h2 style="
                         font-size: ${designSettings.title_font_size || 24}px; /* Dynamic title font size */
                         margin-bottom: 10px;
+                        font-weight:bold;
                     ">
                         ${designSettings.title || 'Age Verification'}
                     </h2>
@@ -112,6 +113,7 @@
                     font-size: ${designSettings.font_size || 16}px; /* Dynamic description font size */
                      margin-bottom: 20px;
                      letter-spacing:0;
+                     
                      ">
                      ${descriptionText.replace(/\n/g, '<br/>')} 
                      </p>
@@ -124,8 +126,7 @@
                             border-radius: ${designSettings.accept_button_round || 8}px; /* Dynamic button radius */
                             cursor: pointer;
                             font-size: ${designSettings.font_size || 16}px; /* Dynamic button font size */
-                            margin-right: 10px;
-                            font-weight:bold;
+                            margin-right: 10px;   
                         ">
                             ${designSettings.accept_button_text || 'Confirm'}
                         </button>

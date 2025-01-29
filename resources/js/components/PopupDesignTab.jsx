@@ -23,7 +23,7 @@ const PopupDesignTab = () => {
     const [designSettings, setDesignSettings] = useState({
         title: 'Age Verification',
         titleFontSize: 18,
-        description: 'You must be 18 years or older to access this website. <br/>Please confirm your age.',
+        description: 'You must be 18 years or older to access this website.',
         acceptButtonText: 'Yes, I\'m over 18.',
         acceptButtonRound: 4,
         rejectButtonText: 'No, I\'m under 18.',
@@ -34,7 +34,7 @@ const PopupDesignTab = () => {
         rejectButtonBgColor: { red: 17, green: 17, blue: 17 },
         rejectButtonTextColor: { red: 255, green: 255, blue: 255 },
         textColor: { red: 0, green: 0, blue: 0 },
-        fontFamily: 'Open Sans',
+        fontFamily: '"Open Sans", sans-serif',
         fontSize: 13,
         templateRound: 4
     });
