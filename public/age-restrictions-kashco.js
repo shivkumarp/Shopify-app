@@ -95,7 +95,6 @@
                     padding: 20px;
                     border-radius: ${designSettings.template_round || 8}px; /* Dynamic modal radius */
                     max-width: 720px;
-                    width: 90%;
                     max-height:500px;
                     text-align: center;
                     font-family: ${designSettings.font_family};

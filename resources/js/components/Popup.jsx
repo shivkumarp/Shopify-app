@@ -24,7 +24,6 @@ const Popup = ({ designSettings, selectedPosition }) => {
                     fontSize: `${designSettings.textFontSize}px`, // Text-specific font size
                     borderRadius: `${designSettings.templateRound}px`, // Dynamic corner radius
                     ...getPositionStyle(selectedPosition),
-                    width: '90%',
                     height: 'auto',
                     maxWidth: '720px',
                     maxHeight: '500px',
