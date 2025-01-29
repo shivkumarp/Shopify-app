@@ -126,7 +126,8 @@ const PopupDesignTab = () => {
             text_color: JSON.stringify(designSettings.textColor),
             font_family: designSettings.fontFamily,
             font_size: designSettings.fontSize,
-            template_round: designSettings.templateRound
+            template_round: designSettings.templateRound,
+            position:selectedPosition
         };
 
         // Save default settings first

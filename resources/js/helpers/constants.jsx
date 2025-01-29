@@ -121,6 +121,15 @@ export const templateDesignForPopUp = [
         rejectButtonTextColor: { red: 255, green: 255, blue: 255 },
         textColor: { red: 0, green: 0, blue: 0 },
     },
+    {
+        id: 6,
+        backgroundColor: { red: 255, green: 255, blue: 255 },
+        acceptButtonBgColor: { red: 255, green: 165, blue: 0 },
+        acceptButtonTextColor: { red: 255, green: 255, blue: 255 },
+        rejectButtonBgColor: { red: 255, green: 69, blue: 0 },
+        rejectButtonTextColor: { red: 255, green: 255, blue: 255 },
+        textColor: { red: 0, green: 0, blue: 0 },
+    },
 ];
 
 export const themeViewColorSelector = [
