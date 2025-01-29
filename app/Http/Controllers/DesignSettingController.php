@@ -136,7 +136,7 @@ class DesignSettingController extends Controller
                 'validation_type' => $validatedData['validationType'] ?? null,
                 'validation_message' => $message,
                 'validation_redirect_url' => $validatedData['redirectUrl'] ?? null,
-                'page_view_type' => $validatedData['pageViewType'] ?? null,
+                'page_view_type' => $validatedData['pageViewType'] ?? 'all',
                 'remember_verification_days' => $validatedData['rememberVerificationDays'] ?? null,
                 'popup_enabled' => $validatedData['popupEnabled'] ?? false,
             ];

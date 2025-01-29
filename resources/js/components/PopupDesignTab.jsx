@@ -304,7 +304,7 @@ const PopupDesignTab = () => {
                             <div className="grid grid-cols-2 gap-4">
                                 {/* Accept Button Section - Left */}
                                 <div className="bg-gray-100 p-4 rounded-lg">
-                                    <h3 className="text-sm font-bold mb-1">Accept Button Settings</h3>
+                                    <h3 className="text-sm font-medium mb-1">Accept Button Settings</h3>
                                     <div className=" grid grid-cols-1 gap-4">
                                         <TextField
                                             label="Button Text"
@@ -328,7 +328,7 @@ const PopupDesignTab = () => {
 
                                 {/* Reject Button Section - Right */}
                                 <div className="p-4 bg-gray-100 rounded-lg">
-                                    <h3 className="text-sm font-bold mb-1">Reject Button Settings</h3>
+                                    <h3 className="text-sm font-medium mb-1">Reject Button Settings</h3>
                                     <div className="grid grid-cols-1 gap-4">
                                         <TextField
                                             label="Button Text"

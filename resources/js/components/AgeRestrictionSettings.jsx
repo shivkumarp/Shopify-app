@@ -1,5 +1,5 @@
 import { Button, Checkbox, FormLayout, Frame, Layout, Page, RangeSlider, Select, TextField, Toast, LegacyTabs, Modal, Text } from '@shopify/polaris';
-import { useCallback, useState } from 'react';
+import { useCallback, useState ,useEffect} from 'react';
 import useAxios from '../hooks/useAxios';
 import PopupDesignTab from './PopupDesignTab';
 import ProductSelectionList from './ProductSelectionList';
@@ -17,7 +17,7 @@ const AgeRestrictionSettings = () => {
         minimumAge: 40,
         validationType: 'block',
         redirectUrl: '',
-        blockMessage:"",
+        blockMessage: "Restricted",
         pageViewType: 'all',
         specificUrls: [],
         popupEnabled: true,
@@ -66,6 +66,30 @@ const AgeRestrictionSettings = () => {
         setSettings(prev => ({ ...prev, [field]: value }));
     }, []);
 
+    useEffect(() => {
+        setLoading(true);
+
+        axios.post('/age-restriction/settings', settings)
+            .then((response) => {
+                if (response.data.success && response.data.data) {
+                    setSettings({
+                        minimumAge: response.data.data.minimum_age ?? 40,
+                        validationType: response.data.data.validation_type ?? 'block',
+                        redirectUrl: response.data.data.validation_redirect_url ?? '',
+                        blockMessage: response.data.data.validation_message ?? '',
+                        pageViewType: response.data.data.page_view_type ?? 'all',
+                        specificUrls: response.data.data.specific_urls ?? [],
+                        popupEnabled: response.data.data.popup_enabled ?? true,
+                        rememberVerificationDays: response.data.data.remember_verification_days ?? 30
+                    });
+                }
+            })
+            .catch((error) => {
+                console.error("Error fetching settings:", error);
+            })
+            .finally(() => setLoading(false));
+    }, []);
+    
     // Save Age Restriction Settings
     const saveSettings = useCallback(() => {
         setLoading(true);
@@ -78,7 +102,6 @@ const AgeRestrictionSettings = () => {
         Promise.all([saveSettingsApi, uploadScriptApi])
             .then(() => {
                 console.log(saveSettingsApi, uploadScriptApi)
-                setSettings(saveSettingsApi);
                 setToastMessage('Settings saved successfully');
             })
             .catch((error) => {
