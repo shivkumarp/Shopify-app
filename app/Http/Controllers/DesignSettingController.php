@@ -124,7 +124,7 @@ class DesignSettingController extends Controller
             $defaultMessages = [
                 'block' => $request->blockMessage,
                 'message' => "You are not able to see website.",
-                'redirect' => "You are being redirected to another page.",
+                'redirect' => null,
             ];
 
             $message = $defaultMessages[$validatedData['validationType']] ?? null;
