@@ -62,7 +62,7 @@ const Popup = ({ designSettings, selectedPosition }) => {
                         style={{
                             backgroundColor: `rgb(${designSettings.acceptButtonBgColor.red}, ${designSettings.acceptButtonBgColor.green}, ${designSettings.acceptButtonBgColor.blue})`,
                             color: `rgb(${designSettings.acceptButtonTextColor.red}, ${designSettings.acceptButtonTextColor.green}, ${designSettings.acceptButtonTextColor.blue})`,
-                            borderRadius: `${designSettings.acceptButtonRound}px`,
+                            borderRadius: `${designSettings.rejectButtonRound}px`,
                             fontSize: `${designSettings.fontSize}px`,
                         }}
                     >
