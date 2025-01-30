@@ -88,7 +88,7 @@ class DesignSettingController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'No design settings found for this user',
-                ], 404);
+                ], 200);
             }
 
             return response()->json([
