@@ -176,7 +176,7 @@ class DesignSettingController extends Controller
                 'validation_redirect_url' => $ageRestrictionData->validation_redirect_url ?? null,
                 'page_view_type' => $ageRestrictionData->page_view_type ?? 'all',
                 'remember_verification_days' => $ageRestrictionData->remember_verification_days ?? null,
-                'popup_enabled' => $ageRestrictionData->popup_enabled ?? false,
+                'popup_enabled' => $ageRestrictionData->popup_enabled ?? true,
             ];
             return response()->json([
                 'success' => true,

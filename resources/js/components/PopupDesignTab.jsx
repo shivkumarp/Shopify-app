@@ -89,11 +89,8 @@ const PopupDesignTab = ({ onNext }) => {
             template_round: designSettings.templateRound
         };
 
-        console.log(designData);
-
         axios.post('/save-pop-design-data', designData)
             .then((response) => {
-                console.log(response);
                 setToastMessage('Design settings saved successfully!');
             })
             .catch((error) => {
@@ -160,7 +157,6 @@ const PopupDesignTab = ({ onNext }) => {
 
         try {
             await axios.post('/save-pop-design-data', defaultData);
-            console.log('Default settings saved successfully');
             setDesignSettings({
                 title: defaultData.title,
                 titleFontSize: defaultData.title_font_size,
@@ -185,7 +181,6 @@ const PopupDesignTab = ({ onNext }) => {
     };
 
     const handleTemplateChange = (templateId) => {
-        console.log(templateId);
         const selectedTemplate = templateDesignForPopUp.find((template) => template.id === templateId);
         if (selectedTemplate) {
             setDesignSettings((prevSettings) => ({
