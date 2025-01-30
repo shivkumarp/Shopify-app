@@ -36,6 +36,7 @@ class DesignSettingController extends Controller
             $formattedData = [
                 ...$validatedData,
                 'accept_button_text_color' => json_decode($validatedData['accept_button_text_color']),
+                'position' => $validatedData['position'] ?? 'center',
                 'accept_button_bg_color' => json_decode($validatedData['accept_button_bg_color']),
                 'reject_button_text_color' => json_decode($validatedData['reject_button_text_color']),
                 'reject_button_bg_color' => json_decode($validatedData['reject_button_bg_color']),
