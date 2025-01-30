@@ -101,7 +101,7 @@
                 max-width: 720px;
                 max-height: 500px;
                 text-align: center;
-                font-family: ${designSettings.font_family} !important; /* 🔥 Force apply */
+                font-family: ${designSettings.font_family} !important; 
                 font-size: ${designSettings.font_size}px;
                 overflow: auto;
                 ${window.innerWidth <= 768 ? `
@@ -117,7 +117,7 @@
                     font-size: ${designSettings.title_font_size || 24}px;
                     margin: 0 0 10px 0;
                     font-weight: bold;
-                    font-family: ${designSettings.font_family} !important; /* 🔥 Ensure it applies */
+                    font-family: ${designSettings.font_family} !important; 
                 ">
                     ${designSettings.title || 'Age Verification'}
                 </h2>
