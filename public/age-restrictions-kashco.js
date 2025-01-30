@@ -117,6 +117,7 @@
                         font-size: ${designSettings.title_font_size || 24}px; /* Dynamic title font size */
                         margin: 0 0 10px 0;
                         font-weight:bold;
+                        font-family: ${designSettings.font_family};
                     ">
                         ${designSettings.title || 'Age Verification'}
                     </h2>
@@ -124,7 +125,7 @@
                     font-size: ${designSettings.font_size || 16}px; /* Dynamic description font size */
                      margin-bottom: 20px;
                      letter-spacing:0;
-
+                     font-family: ${designSettings.font_family};
                      ">
                      ${descriptionText.replace(/\n/g, '<br/>')} 
                      </p>
@@ -138,6 +139,7 @@
                             cursor: pointer;
                             font-size: ${designSettings.font_size || 16}px; /* Dynamic button font size */
                             margin-right: 10px;   
+                            font-family: ${designSettings.font_family};
                         ">
                             ${designSettings.accept_button_text || 'Confirm'}
                         </button>
@@ -149,6 +151,7 @@
                             border-radius: ${designSettings.reject_button_round || 8}px; /* Dynamic button radius */
                             cursor: pointer;
                             font-size: ${designSettings.font_size || 16}px; /* Dynamic button font size */
+                            font-family: ${designSettings.font_family};
                         ">
                             ${designSettings.reject_button_text || 'Reject'}
                         </button>
