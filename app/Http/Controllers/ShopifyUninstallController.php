@@ -9,6 +9,7 @@ use App\Models\ScriptTag;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 
 class ShopifyUninstallController extends Controller
@@ -25,6 +26,8 @@ class ShopifyUninstallController extends Controller
                 Product::where('user_id', $user->id)->delete();
                 DesignSetting::where('user_id', $user->id)->delete();
                 $user->delete();
+                Artisan::call('cache:clear');
+                Artisan::call('route:clear');
                 return response()->json(['message' => 'User and associated data deleted successfully'], 200);
             }
             return response()->json(['message' => 'No user found, but operation completed'], 200);
