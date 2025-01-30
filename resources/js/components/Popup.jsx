@@ -32,8 +32,9 @@ const Popup = ({ designSettings, selectedPosition }) => {
                         left: '50%', 
                         top: '50%', 
                         transform: 'translate(-50%, -50%)', 
-                        bottom: 'auto', 
-                        right: 'auto',
+                        // bottom: 'auto', 
+                        // right: 'auto',
+                           width:'90%'
                     } : getPositionStyle?.('bottom-right')), 
                 }}
             >
