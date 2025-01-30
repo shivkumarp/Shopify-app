@@ -20,7 +20,7 @@ const PopupDesignTab = ({ onNext }) => {
         rejectButtonTextColor: false
     });
 
-    const [selectedPosition, setSelectedPosition] = useState('bottom-right');
+    const [selectedPosition, setSelectedPosition] = useState('center');
     const [designSettings, setDesignSettings] = useState({
         title: 'Age Verification',
         titleFontSize: 18,
