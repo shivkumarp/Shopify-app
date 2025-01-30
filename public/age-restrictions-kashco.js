@@ -101,7 +101,7 @@
                 max-width: 720px;
                 max-height: 500px;
                 text-align: center;
-                font-family: ${designSettings.font_family}; /* ✅ Apply globally */
+                font-family: ${designSettings.font_family} !important; /* 🔥 Force apply */
                 font-size: ${designSettings.font_size}px;
                 overflow: auto;
                 ${window.innerWidth <= 768 ? `
@@ -117,6 +117,7 @@
                     font-size: ${designSettings.title_font_size || 24}px;
                     margin: 0 0 10px 0;
                     font-weight: bold;
+                    font-family: ${designSettings.font_family} !important; /* 🔥 Ensure it applies */
                 ">
                     ${designSettings.title || 'Age Verification'}
                 </h2>
@@ -124,6 +125,7 @@
                     font-size: ${designSettings.font_size || 16}px;
                     margin-bottom: 20px;
                     letter-spacing: 0;
+                    font-family: ${designSettings.font_family} !important;
                 ">
                     ${descriptionText.replace(/\n/g, '<br/>')}
                 </p>
@@ -137,6 +139,7 @@
                         cursor: pointer;
                         font-size: ${designSettings.font_size || 16}px;
                         margin-right: 10px;
+                        font-family: ${designSettings.font_family} !important;
                     ">
                         ${designSettings.accept_button_text || 'Confirm'}
                     </button>
@@ -148,13 +151,12 @@
                         border-radius: ${designSettings.reject_button_round || 8}px;
                         cursor: pointer;
                         font-size: ${designSettings.font_size || 16}px;
+                        font-family: ${designSettings.font_family} !important;
                     ">
                         ${designSettings.reject_button_text || 'Reject'}
                     </button>
                 </div>
             `;
-
-
 
                 document.body.appendChild(modal);
                 modal.appendChild(modalContent);
