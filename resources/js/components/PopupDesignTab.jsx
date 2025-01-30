@@ -6,7 +6,7 @@ import Popup from './Popup';
 import ColorPicker from './ColorPicker';
 
 const PopupDesignTab = () => {
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const { axios } = useAxios()
     const [toastMessage, setToastMessage] = useState('')
 
@@ -73,7 +73,6 @@ const PopupDesignTab = () => {
     };
 
     const savePopDesignData = () => {
-        setLoading(true);
         const designData = {
             title: designSettings.title,
             title_font_size: designSettings.titleFontSize,
@@ -99,19 +98,18 @@ const PopupDesignTab = () => {
         axios.post('/save-pop-design-data', designData)
             .then((response) => {
                 console.log(response);
-                setLoading(false);
                 setToastMessage('Design settings saved successfully!');
             })
             .catch((error) => {
-                setLoading(false);
                 setToastMessage('Error saving design settings. Please try again.', error);
             });
     };
 
     useEffect(() => {
-        axios.get('/get-pop-design-data')
-            .then(response => {
-                if (response.data.success && response.data.data) {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('/get-pop-design-data');
+                if (response.data.success === true && response.data.data) {
                     setDesignSettings({
                         title: response.data.data.title || 'Age Verification',
                         titleFontSize: response.data.data.title_font_size || 18,
@@ -130,47 +128,65 @@ const PopupDesignTab = () => {
                         fontSize: response.data.data.font_size || 13,
                         templateRound: response.data.data.template_round || 4
                     });
-                    setSelectedPosition(response.data.data.position || 'bottom-right');
                 } else {
-                    saveDefaultSettings();
+                    await saveDefaultSettings();
                 }
-            })
-            .catch(error => {
+            } catch (error) {
                 console.error('Error fetching design settings:', error);
-                saveDefaultSettings();
-            });
+                await saveDefaultSettings();
+            } finally {
+                setLoading(false);
+            }
+        };
 
-        function saveDefaultSettings() {
-            const defaultData = {
-                title: 'Age Verification',
-                title_font_size: 18,
-                description: 'You must be 18 years or older to access this website.',
-                accept_button_text: 'Yes, I\'m over 18',
-                accept_button_round: 4,
-                reject_button_text: 'No, I\'m under 18',
-                reject_button_round: 4,
-                background_color: JSON.stringify({ red: 255, green: 255, blue: 255 }),
-                accept_button_bg_color: JSON.stringify({ red: 255, green: 0, blue: 4 }),
-                accept_button_text_color: JSON.stringify({ red: 255, green: 255, blue: 255 }),
-                reject_button_bg_color: JSON.stringify({ red: 17, green: 17, blue: 17 }),
-                reject_button_text_color: JSON.stringify({ red: 255, green: 255, blue: 255 }),
-                text_color: JSON.stringify({ red: 0, green: 0, blue: 0 }),
-                font_family: '"Open Sans", sans-serif',
-                font_size: 13,
-                template_round: 4
-            };
-
-            axios.post('/save-pop-design-data', defaultData)
-                .then(() => {
-                    console.log('Default settings saved successfully');
-                    setDesignSettings(defaultData);
-                })
-                .catch((error) => {
-                    console.error('Error saving default settings:', error);
-                });
-        }
+        fetchData();
     }, []);
 
+    const saveDefaultSettings = async () => {
+        const defaultData = {
+            title: 'Age Verification',
+            title_font_size: 18,
+            description: 'You must be 18 years or older to access this website.',
+            accept_button_text: 'Yes, I\'m over 18',
+            accept_button_round: 4,
+            reject_button_text: 'No, I\'m under 18',
+            reject_button_round: 4,
+            background_color: JSON.stringify({ red: 255, green: 255, blue: 255 }),
+            accept_button_bg_color: JSON.stringify({ red: 255, green: 0, blue: 4 }),
+            accept_button_text_color: JSON.stringify({ red: 255, green: 255, blue: 255 }),
+            reject_button_bg_color: JSON.stringify({ red: 17, green: 17, blue: 17 }),
+            reject_button_text_color: JSON.stringify({ red: 255, green: 255, blue: 255 }),
+            text_color: JSON.stringify({ red: 0, green: 0, blue: 0 }),
+            font_family: '"Open Sans", sans-serif',
+            font_size: 13,
+            template_round: 4
+        };
+
+        try {
+            await axios.post('/save-pop-design-data', defaultData);
+            console.log('Default settings saved successfully');
+            setDesignSettings({
+                title: defaultData.title,
+                titleFontSize: defaultData.title_font_size,
+                description: defaultData.description,
+                acceptButtonText: defaultData.accept_button_text,
+                acceptButtonRound: defaultData.accept_button_round,
+                rejectButtonText: defaultData.reject_button_text,
+                rejectButtonRound: defaultData.reject_button_round,
+                backgroundColor: JSON.parse(defaultData.background_color),
+                acceptButtonBgColor: JSON.parse(defaultData.accept_button_bg_color),
+                acceptButtonTextColor: JSON.parse(defaultData.accept_button_text_color),
+                rejectButtonBgColor: JSON.parse(defaultData.reject_button_bg_color),
+                rejectButtonTextColor: JSON.parse(defaultData.reject_button_text_color),
+                textColor: JSON.parse(defaultData.text_color),
+                fontFamily: defaultData.font_family,
+                fontSize: defaultData.font_size,
+                templateRound: defaultData.template_round
+            });
+        } catch (error) {
+            console.error('Error saving default settings:', error);
+        }
+    };
 
     const handleTemplateChange = (templateId) => {
         console.log(templateId);
@@ -181,6 +197,10 @@ const PopupDesignTab = () => {
                 ...selectedTemplate,
             }));
         }
+    }
+
+    if (loading) {
+        return <div></div>;
     }
 
     return (

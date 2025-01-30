@@ -1,5 +1,5 @@
 import { Button, Checkbox, FormLayout, Frame, Layout, Page, RangeSlider, Select, TextField, Toast, LegacyTabs, Modal, Text } from '@shopify/polaris';
-import { useCallback, useState ,useEffect} from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import useAxios from '../hooks/useAxios';
 import PopupDesignTab from './PopupDesignTab';
 import ProductSelectionList from './ProductSelectionList';
@@ -67,50 +67,52 @@ const AgeRestrictionSettings = () => {
     }, []);
 
     useEffect(() => {
-        setLoading(true);
-
-        axios.post('/age-restriction/settings', settings)
-            .then((response) => {
+        const fetchSettings = async () => {
+            setLoading(true);
+            try {
+                const response = await axios.get('/age-restriction');
                 if (response.data.success && response.data.data) {
                     setSettings({
                         minimumAge: response.data.data.minimum_age ?? 40,
                         validationType: response.data.data.validation_type ?? 'block',
                         redirectUrl: response.data.data.validation_redirect_url ?? '',
-                        blockMessage: response.data.data.validation_message ?? '',
+                        blockMessage: response.data.data.validation_message ?? 'Restricted',
                         pageViewType: response.data.data.page_view_type ?? 'all',
                         specificUrls: response.data.data.specific_urls ?? [],
                         popupEnabled: response.data.data.popup_enabled ?? true,
                         rememberVerificationDays: response.data.data.remember_verification_days ?? 30
                     });
                 }
-            })
-            .catch((error) => {
+            } catch (error) {
                 console.error("Error fetching settings:", error);
-            })
-            .finally(() => setLoading(false));
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchSettings();
     }, []);
-    
+
     // Save Age Restriction Settings
-    const saveSettings = useCallback(() => {
-        setLoading(true);
+    const saveSettings = useCallback(async () => {
+        try {
+            const [saveSettingsResponse, uploadScriptResponse] = await Promise.all([
+                axios.post('/age-restriction/settings', settings),
+                axios.post('/upload-script-tag-shopify')
+            ]);
 
-        // Prepare API calls
-        const saveSettingsApi = axios.post('/age-restriction/settings', settings);
-        const uploadScriptApi = axios.post('/upload-script-tag-shopify');
+            // Log responses for debugging
+            console.log('Save Settings Response:', saveSettingsResponse.data);
+            console.log('Upload Script Response:', uploadScriptResponse.data);
 
-        // Call both APIs concurrently
-        Promise.all([saveSettingsApi, uploadScriptApi])
-            .then(() => {
-                console.log(saveSettingsApi, uploadScriptApi)
-                setToastMessage('Settings saved successfully');
-            })
-            .catch((error) => {
-                console.error('Error saving settings or uploading script:', error);
-                setToastMessage('Failed to save settings');
-            })
-            .finally(() => setLoading(false));
-    }, [axios, settings]);
-
+            // Show success message
+            setToastMessage('Settings saved successfully');
+        } catch (error) {
+            console.error('Error saving settings or uploading script:', error);
+            setToastMessage('Failed to save settings');
+        } finally {
+        }
+    }, [settings]);
 
     return (
         <Frame>
@@ -132,6 +134,7 @@ const AgeRestrictionSettings = () => {
                             <Layout>
                                 <Layout.Section>
                                     <div className="bg-white p-4 rounded-lg shadow-sm space-y-2">
+                                        {loading && <div>Loading...</div>}
                                         <FormLayout>
                                             {/* Enable Popup Section */}
                                             <div className="border-b pb-4">

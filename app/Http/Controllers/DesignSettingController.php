@@ -10,13 +10,13 @@ use Illuminate\Http\Request;
 class DesignSettingController extends Controller
 {
     public function savePopupDesignData(Request $request)
-    { 
+    {
         try {
             $validatedData = $request->validate([
                 'title' => 'nullable|string|max:255',
-                'title_font_size' =>'nullable',
+                'title_font_size' => 'nullable',
                 'description' => 'nullable|string',
-                'template_round'=>'nullable',
+                'template_round' => 'nullable',
                 'accept_button_text' => 'nullable|string|max:255',
                 'accept_button_round' => 'nullable',
                 'accept_button_text_color' => 'nullable|json',
@@ -111,7 +111,7 @@ class DesignSettingController extends Controller
                 'minimumAge' => 'nullable|integer|min:13|max:120',
                 'validationType' => 'nullable|string|in:block,message,redirect',
                 'redirectUrl' => 'nullable|url|max:255',
-                'blockMessage'=>'nullable|max:255',
+                'blockMessage' => 'nullable|max:255',
                 'pageViewType' => 'nullable|string|in:all,specific',
                 'popupEnabled' => 'nullable|boolean',
                 'rememberVerificationDays' => 'nullable|integer|min:15|max:90',
@@ -150,6 +150,38 @@ class DesignSettingController extends Controller
                 'success' => true,
                 'data' => $ageSettings,
                 'message' => 'Age settings saved successfully',
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error saving age restriction settings',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function getRestrictionsSetting(Request $request)
+    {
+        try {
+            $shop = $request->user();
+
+            $ageRestrictionData = AgeRestriction::where('user_id', $shop->id)->first();
+
+            $data = [
+                'user_id' => $shop->id,
+                'widget_name' => $ageRestrictionData->widget_name ?? null,
+                'minimum_age' => $ageRestrictionData->minimum_age ?? null,
+                'validation_type' => $ageRestrictionData->validation_type ?? null,
+                'validation_message' => $ageRestrictionData->validation_message,
+                'validation_redirect_url' => $ageRestrictionData->validation_redirect_url ?? null,
+                'page_view_type' => $ageRestrictionData->page_view_type ?? 'all',
+                'remember_verification_days' => $ageRestrictionData->remember_verification_days ?? null,
+                'popup_enabled' => $ageRestrictionData->popup_enabled ?? false,
+            ];
+            return response()->json([
+                'success' => true,
+                'data' => $data,
+                'message' => 'Age settings get successfully',
             ], 201);
         } catch (\Exception $e) {
             return response()->json([

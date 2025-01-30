@@ -13,16 +13,17 @@ const Popup = ({ designSettings, selectedPosition }) => {
         return positions[position] || positions['top-left'];
     }
 
+    
     return (
         <div className="mt-5">
             <div
                 className="p-5 text-center shadow-2xl fixed z-50"
                 style={{
-                    backgroundColor: `rgb(${designSettings?.backgroundColor?.red || 255}, ${designSettings?.backgroundColor?.green || 255}, ${designSettings?.backgroundColor?.blue || 255})`,
-                    color: `rgb(${designSettings?.textColor?.red || 0}, ${designSettings?.textColor?.green || 0}, ${designSettings?.textColor?.blue || 0})`,
-                    fontFamily: designSettings?.fontFamily || '"Open Sans", sans-serif',
-                    fontSize: `${designSettings?.fontSize || 13}px`,
-                    borderRadius: `${designSettings?.templateRound || 4}px`,
+                    backgroundColor: `rgb(${designSettings.backgroundColor.red}, ${designSettings.backgroundColor.green}, ${designSettings.backgroundColor.blue})`,
+                    color: `rgb(${designSettings.textColor.red}, ${designSettings.textColor.green}, ${designSettings.textColor.blue})`,
+                    fontFamily: designSettings.fontFamily,
+                    fontSize: `${designSettings.fontSize}px`,
+                    borderRadius: `${designSettings.templateRound}px`,
                     ...getPositionStyle?.('bottom-right'),
                     height: 'auto',
                     maxWidth: '720px',
@@ -33,43 +34,43 @@ const Popup = ({ designSettings, selectedPosition }) => {
                 <h2
                     className="mb-4"
                     style={{
-                        fontSize: `${designSettings?.titleFontSize || 18}px`,
+                        fontSize: `${designSettings.titleFontSize}px`,
                         fontWeight: 'bold',
                     }}
                 >
-                    {designSettings?.title || 'Your Title Here'}
+                    {designSettings.title}
                 </h2>
                 <p
                     className="mb-5"
                     style={{
-                        fontSize: `${designSettings?.fontSize || 13}px`,
+                        fontSize: `${designSettings.fontSize}px`,
                         whiteSpace: 'pre-wrap',
                     }}
                 >
-                    {designSettings?.description || 'Your description here'}
+                    {designSettings.description}
                 </p>
                 <div className="flex gap-2 justify-center">
                     <button
                         className="px-4 py-2"
                         style={{
-                            backgroundColor: `rgb(${designSettings?.acceptButtonBgColor?.red || 255}, ${designSettings?.acceptButtonBgColor?.green || 0}, ${designSettings?.acceptButtonBgColor?.blue || 4})`,
-                            color: `rgb(${designSettings?.acceptButtonTextColor?.red || 255}, ${designSettings?.acceptButtonTextColor?.green || 255}, ${designSettings?.acceptButtonTextColor?.blue || 255})`,
-                            borderRadius: `${designSettings?.acceptButtonRound || 4}px`,
-                            fontSize: `${designSettings?.fontSize || 13}px`,
+                            backgroundColor: `rgb(${designSettings.acceptButtonBgColor.red}, ${designSettings.acceptButtonBgColor.green}, ${designSettings.acceptButtonBgColor.blue})`,
+                            color: `rgb(${designSettings.acceptButtonTextColor.red}, ${designSettings.acceptButtonTextColor.green}, ${designSettings.acceptButtonTextColor.blue})`,
+                            borderRadius: `${designSettings.acceptButtonRound}px`,
+                            fontSize: `${designSettings.fontSize}px`,
                         }}
                     >
-                        {designSettings?.acceptButtonText || 'Accept'}
+                        {designSettings.acceptButtonText}
                     </button>
                     <button
                         className="px-4 py-2"
                         style={{
-                            backgroundColor: `rgb(${designSettings?.rejectButtonBgColor?.red || 17}, ${designSettings?.rejectButtonBgColor?.green || 17}, ${designSettings?.rejectButtonBgColor?.blue || 17})`,
-                            color: `rgb(${designSettings?.rejectButtonTextColor?.red || 255}, ${designSettings?.rejectButtonTextColor?.green || 255}, ${designSettings?.rejectButtonTextColor?.blue || 255})`,
-                            borderRadius: `${designSettings?.rejectButtonRound || 4}px`,
-                            fontSize: `${designSettings?.fontSize || 13}px`,
+                            backgroundColor: `rgb(${designSettings.rejectButtonBgColor.red}, ${designSettings.rejectButtonBgColor.green}, ${designSettings.rejectButtonBgColor.blue})`,
+                            color: `rgb(${designSettings.rejectButtonTextColor.red}, ${designSettings.rejectButtonTextColor.green}, ${designSettings.rejectButtonTextColor.blue})`,
+                            borderRadius: `${designSettings.rejectButtonRound}px`,
+                            fontSize: `${designSettings.fontSize}px`,
                         }}
                     >
-                        {designSettings?.rejectButtonText || 'No, thanks'}
+                        {designSettings.rejectButtonText}
                     </button>
                 </div>
             </div>
