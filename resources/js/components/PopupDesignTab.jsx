@@ -4,6 +4,7 @@ import { fontOptions, themeViewColorSelector, positionOptions, templateDesignFor
 import useAxios from '../hooks/useAxios';
 import Popup from './Popup';
 import ColorPicker from './ColorPicker';
+import { Loader } from 'lucide-react';
 
 const PopupDesignTab = () => {
     const [loading, setLoading] = useState(true)
@@ -200,7 +201,7 @@ const PopupDesignTab = () => {
     }
 
     if (loading) {
-        return <div></div>;
+        return <Loader></Loader>;
     }
 
     return (
