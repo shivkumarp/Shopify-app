@@ -100,11 +100,7 @@ const AgeRestrictionSettings = () => {
                 axios.post('/age-restriction/settings', settings),
                 axios.post('/upload-script-tag-shopify')
             ]);
-
-            // Log responses for debugging
-            console.log('Save Settings Response:', saveSettingsResponse.data);
-            console.log('Upload Script Response:', uploadScriptResponse.data);
-
+            
             // Show success message
             setToastMessage('Settings saved successfully');
         } catch (error) {
