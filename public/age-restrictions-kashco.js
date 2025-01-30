@@ -93,28 +93,24 @@
                 // Modal content (child) container
                 const modalContent = document.createElement('div');
                 modalContent.style.cssText = `
-                position: absolute;
-                background-color: rgb(${designSettings.background_color.red}, ${designSettings.background_color.green}, ${designSettings.background_color.blue});
-                color: rgb(${designSettings.text_color.red}, ${designSettings.text_color.green}, ${designSettings.text_color.blue});
-                padding: 20px;
-                border-radius: ${designSettings.template_round || 8}px; /* Dynamic modal radius */
-                max-width: 720px;
-                max-height: 500px;
-                text-align: center;
-                font-family: ${designSettings.font_family};
-                font-size: ${designSettings.font_size}px;
-                overflow: auto;
-            `;
-
-                // Handle mobile styles separately
-                if (window.innerWidth <= 768) {
-                    modalContent.style.left = "50%";
-                    modalContent.style.top = "50%";
-                    modalContent.style.transform = "translate(-50%, -50%)";
-                    modalContent.style.width = "90%";
-                } else {
-                    Object.assign(modalContent.style, positionStyles);
-                }
+                    position: absolute;
+                    background-color: rgb(${designSettings.background_color.red}, ${designSettings.background_color.green}, ${designSettings.background_color.blue});
+                    color: rgb(${designSettings.text_color.red}, ${designSettings.text_color.green}, ${designSettings.text_color.blue});
+                    padding: 20px;
+                    border-radius: ${designSettings.template_round || 8}px;
+                    max-width: 720px;
+                    max-height: 500px;
+                    text-align: center;
+                    font-family: ${designSettings.font_family};
+                    font-size: ${designSettings.font_size}px;
+                    overflow: auto;
+                    ${window.innerWidth <= 768 ? `
+                        left: 50%;
+                        top: 50%;
+                        transform: translate(-50%, -50%);
+                        width: 90%;
+                    ` : positionStyles}
+                `;
 
                 modalContent.innerHTML = `
                     <h2 style="

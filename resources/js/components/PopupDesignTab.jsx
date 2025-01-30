@@ -6,7 +6,7 @@ import Popup from './Popup';
 import ColorPicker from './ColorPicker';
 import { Loader } from 'lucide-react';
 
-const PopupDesignTab = () => {
+const PopupDesignTab = ({ onNext }) => {
     const [loading, setLoading] = useState(true)
     const { axios } = useAxios()
     const [toastMessage, setToastMessage] = useState('')
@@ -422,6 +422,11 @@ const PopupDesignTab = () => {
 
                     {/* Popup Preview */}
                     <Popup designSettings={designSettings} selectedPosition={selectedPosition} />
+                    <div className="flex justify-start mt-4">
+                        <Button primary onClick={onNext}>
+                            Next: Configure Settings
+                        </Button>
+                    </div>
                 </div>
             </Layout.Section>
 

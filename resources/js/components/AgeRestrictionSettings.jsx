@@ -100,7 +100,7 @@ const AgeRestrictionSettings = () => {
                 axios.post('/age-restriction/settings', settings),
                 axios.post('/upload-script-tag-shopify')
             ]);
-            
+
             // Show success message
             setToastMessage('Settings saved successfully');
         } catch (error) {
@@ -117,12 +117,7 @@ const AgeRestrictionSettings = () => {
                     <LegacyTabs selected={selectedTab} onSelect={handleTabChange} tabs={tabs}>
                         {selectedTab === 0 && (
                             <div className="space-y-2">
-                                <PopupDesignTab />
-                                <div className="flex justify-start">
-                                    <Button primary onClick={() => setSelectedTab(1)}>
-                                        Next: Configure Settings
-                                    </Button>
-                                </div>
+                                <PopupDesignTab  onNext={() => setSelectedTab(1)} />
                             </div>
                         )}
 
@@ -130,7 +125,6 @@ const AgeRestrictionSettings = () => {
                             <Layout>
                                 <Layout.Section>
                                     <div className="bg-white p-4 rounded-lg shadow-sm space-y-2">
-                                        {loading && <div>Loading...</div>}
                                         <FormLayout>
                                             {/* Enable Popup Section */}
                                             <div className="border-b pb-4">
