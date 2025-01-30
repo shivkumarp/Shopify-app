@@ -13,7 +13,7 @@ const Popup = ({ designSettings, selectedPosition }) => {
         return positions[position] || positions['top-left'];
     }
 
-    
+
     return (
         <div className="mt-5">
             <div
@@ -24,11 +24,17 @@ const Popup = ({ designSettings, selectedPosition }) => {
                     fontFamily: designSettings.fontFamily,
                     fontSize: `${designSettings.fontSize}px`,
                     borderRadius: `${designSettings.templateRound}px`,
-                    ...getPositionStyle?.('bottom-right'),
                     height: 'auto',
                     maxWidth: '720px',
                     maxHeight: '500px',
                     overflow: 'auto',
+                    ...(window.innerWidth <= 768 ? { 
+                        left: '50%', 
+                        top: '50%', 
+                        transform: 'translate(-50%, -50%)', 
+                        bottom: 'auto', 
+                        right: 'auto',
+                    } : getPositionStyle?.('bottom-right')), 
                 }}
             >
                 <h2

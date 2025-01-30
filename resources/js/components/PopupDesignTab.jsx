@@ -64,12 +64,7 @@ const PopupDesignTab = () => {
         }));
     };
 
-    const handleColorChange = (color, type) => {
-        const rgbColor = {
-            red: color.rgb.r,
-            green: color.rgb.g,
-            blue: color.rgb.b
-        };
+    const handleColorChange = (rgbColor, type) => {
         setDesignSettings((prev) => ({ ...prev, [type]: rgbColor }));
     };
 
@@ -201,39 +196,67 @@ const PopupDesignTab = () => {
     }
 
     if (loading) {
-        return <Loader></Loader>;
+        return (
+            <div className="fixed inset-0 flex items-center justify-center bg-white/80">
+                <Loader className="w-12 h-12 animate-spin text-gray-700" />
+            </div>
+        );
     }
 
     return (
         <Layout>
             <Layout.Section>
                 {/* Container */}
-                <div className="max-w-4xl mx-auto space-y-6 p-6 bg-white rounded-lg shadow-sm">
+                <div className="max-w-4xl mx-auto space-y-4 p-4 sm:p-6 bg-white rounded-lg shadow-sm">
                     <FormLayout>
                         {/* Templates Section */}
-                        <div className="mb-6">
-                            <h3 className="text-sm font-medium mb-1">Ready For You Templates</h3>
-                            <div className="flex gap-2 mb-2 ">
-                                {themeViewColorSelector.map((gradient, index) => (
-                                    <div
-                                        key={index}
-                                        className={`w-10 h-5 rounded-sm cursor-pointer border border-gray-300 `}
-                                        style={{
-                                            background: `linear-gradient(to right, ${gradient.from} 0,${gradient.from} 33.333%, ${gradient.middle} 33.333%,${gradient.middle} 66.666%, ${gradient.to} 66.666%,${gradient.to} 100%)`
-                                        }}
-                                        onClick={() => handleTemplateChange(index)}
-                                    />
-                                ))}
+                        <div className="flex flex-col sm:flex-row justify-between w-full items-start gap-4 sm:gap-0">
+                            <div className="w-full sm:w-auto mb-4 sm:mb-6">
+                                <h3 className="text-sm font-medium mb-1">Ready For You Templates</h3>
+                                <div className="flex flex-wrap gap-2 mb-2">
+                                    {themeViewColorSelector.map((gradient, index) => (
+                                        <div
+                                            key={index}
+                                            className="w-10 h-5 rounded-sm cursor-pointer border border-gray-300"
+                                            style={{
+                                                background: `linear-gradient(to right, ${gradient.from} 0,${gradient.from} 33.333%, ${gradient.middle} 33.333%,${gradient.middle} 66.666%, ${gradient.to} 66.666%,${gradient.to} 100%)`
+                                            }}
+                                            onClick={() => handleTemplateChange(index)}
+                                        />
+                                    ))}
+                                </div>
                             </div>
+
+                            <button
+                                onClick={saveDefaultSettings}
+                                className="w-full sm:w-auto px-3 py-1.5 text-sm text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors flex items-center justify-center sm:justify-start gap-1"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                >
+                                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                                    <path d="M3 3v5h5" />
+                                </svg>
+                                Reset
+                            </button>
                         </div>
+
                         {/* Title Section */}
-                        <div className="grid grid-cols-2 gap-8">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8">
                             <TextField
                                 label="Title"
                                 value={designSettings.title}
                                 onChange={(value) => handleChange(value, 'title')}
                             />
-                            <div className="px-6">
+                            <div className="px-2 sm:px-6">
                                 <label className="block mb-4">{`Title Font Size: ${designSettings.titleFontSize ?? 10}px`}</label>
                                 <RangeSlider
                                     output
@@ -247,7 +270,7 @@ const PopupDesignTab = () => {
                         </div>
 
                         {/* Description Section */}
-                        <div className="mb-6">
+                        <div className="mb-4 sm:mb-6">
                             <TextField
                                 label="Description"
                                 value={designSettings.description}
@@ -257,7 +280,7 @@ const PopupDesignTab = () => {
                         </div>
 
                         {/* Font and Position Settings */}
-                        <div className="grid p-2 grid-cols-3 gap-4 mb-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-2 mb-4">
                             <Select
                                 label="Font Family"
                                 options={fontOptions}
@@ -265,7 +288,7 @@ const PopupDesignTab = () => {
                                 onChange={(value) => handleChange(value, 'fontFamily')}
                             />
 
-                            <div className="px-6">
+                            <div className="px-2 sm:px-6">
                                 <label className="block mb-4">{`Font Size: ${designSettings.fontSize ?? 10}px`}</label>
                                 <RangeSlider
                                     output
@@ -276,7 +299,7 @@ const PopupDesignTab = () => {
                                     onChange={(value) => handleChange(value, 'fontSize')}
                                 />
                             </div>
-                            <div className="px-6">
+                            <div className="px-2 sm:px-6">
                                 <label className="block mb-4">{`Popup Corner Radius: ${designSettings.templateRound ?? 1}px`}</label>
                                 <RangeSlider
                                     output
@@ -287,13 +310,12 @@ const PopupDesignTab = () => {
                                     onChange={(value) => handleChange(value, 'templateRound')}
                                 />
                             </div>
-
                         </div>
 
                         {/* Color Settings */}
-                        <div className=" p-4 mb-2">
-                            <div className="flex items-center gap-1">
-                                <div className="flex-1 mb-4">
+                        <div className="p-2 sm:p-4 mb-2">
+                            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                                <div className="w-full sm:flex-1 mb-4 sm:mb-0">
                                     <ColorPicker
                                         type="backgroundColor"
                                         label="Background Color"
@@ -301,7 +323,7 @@ const PopupDesignTab = () => {
                                         onColorChange={handleColorChange}
                                     />
                                 </div>
-                                <div className="flex-1 mb-4">
+                                <div className="w-full sm:flex-1 mb-4 sm:mb-0">
                                     <ColorPicker
                                         type="textColor"
                                         label="Text Color"
@@ -309,7 +331,7 @@ const PopupDesignTab = () => {
                                         onColorChange={handleColorChange}
                                     />
                                 </div>
-                                <div className="flex-1">
+                                <div className="w-full sm:flex-1">
                                     <Select
                                         label="Popup Position"
                                         options={positionOptions}
@@ -320,13 +342,13 @@ const PopupDesignTab = () => {
                             </div>
                         </div>
 
-                        {/* Accept Button Section */}
-                        <div className="p-4 rounded-lg mb-1">
-                            <div className="grid grid-cols-2 gap-4">
-                                {/* Accept Button Section - Left */}
+                        {/* Button Settings */}
+                        <div className="p-2 sm:p-4 rounded-lg mb-1">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                {/* Accept Button Section */}
                                 <div className="bg-gray-100 p-4 rounded-lg">
                                     <h3 className="text-sm font-medium mb-1">Accept Button Settings</h3>
-                                    <div className=" grid grid-cols-1 gap-4">
+                                    <div className="grid grid-cols-1 gap-4">
                                         <TextField
                                             label="Button Text"
                                             value={designSettings.acceptButtonText}
@@ -347,8 +369,8 @@ const PopupDesignTab = () => {
                                     </div>
                                 </div>
 
-                                {/* Reject Button Section - Right */}
-                                <div className="p-4 bg-gray-100 rounded-lg">
+                                {/* Reject Button Section */}
+                                <div className="bg-gray-100 p-4 rounded-lg">
                                     <h3 className="text-sm font-medium mb-1">Reject Button Settings</h3>
                                     <div className="grid grid-cols-1 gap-4">
                                         <TextField
@@ -372,8 +394,8 @@ const PopupDesignTab = () => {
                                 </div>
                             </div>
 
-                            {/* Round Section - Centered Below */}
-                            <div className="px-6">
+                            {/* Button Radius Slider */}
+                            <div className="px-2 sm:px-6 mt-4">
                                 <label className="block mb-4">{`Button Radius: ${designSettings.rejectButtonRound ?? 0}px`}</label>
                                 <RangeSlider
                                     output
@@ -391,12 +413,13 @@ const PopupDesignTab = () => {
                             <Button
                                 primary
                                 onClick={savePopDesignData}
-                                className="px-6 py-2"
+                                className="w-full sm:w-auto px-6 py-2"
                             >
                                 Save Pop Design
                             </Button>
                         </div>
                     </FormLayout>
+
                     {/* Popup Preview */}
                     <Popup designSettings={designSettings} selectedPosition={selectedPosition} />
                 </div>
