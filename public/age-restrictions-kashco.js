@@ -116,6 +116,7 @@
                     margin: 0 0 10px 0;
                     font-weight: bold;
                     font-family: inherit; 
+                    color:inherit;
                 ">
                     ${designSettings.title || 'Age Verification'}
                 </h2>
