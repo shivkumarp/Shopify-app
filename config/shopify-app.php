@@ -347,14 +347,27 @@ return [
     'webhooks' => [
         [
             'topic' => env('SHOPIFY_WEBHOOK_1_TOPIC', 'APP_UNINSTALLED'),
-            'address' => env('SHOPIFY_WEBHOOK_1_ADDRESS', 'https://54e3-125-62-116-172.ngrok-free.app/api/app-uninstall')
+            'address' => env('SHOPIFY_WEBHOOK_1_ADDRESS', 'https://codeoink.com/api/app-uninstall')
+        ],
+        [
+            'topic' => env('SHOPIFY_WEBHOOK_2_TOPIC', 'SHOP_REDACT'),
+            'address' => env('SHOPIFY_WEBHOOK_2_ADDRESS', 'https://codeoink.com/api/shopify/redact')
+        ],
+        [
+            'topic' => env('SHOPIFY_WEBHOOK_3_TOPIC', 'CUSTOMERS_DATA_REQUEST'),
+            'address' => env('SHOPIFY_WEBHOOK_3_ADDRESS', 'https://codeoink.com/api/customers/redact')
+        ],
+        [
+            'topic' => env('SHOPIFY_WEBHOOK_4_TOPIC', 'CUSTOMERS_REDACT'),
+            'address' => env('SHOPIFY_WEBHOOK_4_ADDRESS', 'https://codeoink.com/api/customers/data_request')
         ],
         /*
             [
                 'topic' => env('SHOPIFY_WEBHOOK_1_TOPIC', 'ORDERS_CREATE'),
                 'address' => env('SHOPIFY_WEBHOOK_1_ADDRESS', 'https://some-app.com/webhook/orders-create')
             ], [
-                'topic' => env('SHOPIFY_WEBHOOK_2_TOPIC', 'APP_PURCHASES_ONE_TIME_UPDATE'),
+                'topic' => env('SHOPIFY_WEBHOOK_2_TOPIC', '
+                '),
                 'address' => env('SHOPIFY_WEBHOOK_2_ADDRESS', 'https://some-app.com/webhook/purchase'),
             ]
             // In certain situations you may wish to map the webhook to a specific class

@@ -35,4 +35,26 @@ class ShopifyUninstallController extends Controller
             return response()->json(['error' => 'An error occurred while processing the request', $e], 500);
         }
     }
+
+    public function appRedact(Request $request)
+    { 
+        if (!$this->verifyShopifyWebhook($request)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+        return response()->json(['status' => 'success'], 200);
+    }
+
+    private function verifyShopifyWebhook(Request $request)
+    {
+        $hmacHeader = $request->header('X-Shopify-Hmac-Sha256');
+        $data = $request->getContent();
+        $calculatedHmac = base64_encode(hash_hmac('sha256', $data,"08cef4c0e259bc3af138bebeef27ddb5", true));
+        return hash_equals($hmacHeader, $calculatedHmac);
+    }
+
+    // public function generateHmac($data)
+    // {
+    //     $shopifySecret = ""; 
+    //     return base64_encode(hash_hmac('sha256', $data, $shopifySecret, true));
+    // }
 }
