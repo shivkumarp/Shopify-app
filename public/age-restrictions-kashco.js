@@ -117,6 +117,7 @@
                     font-weight: bold;
                     font-family: inherit; 
                     color:inherit;
+                    letter-spacing: 0;
                 ">
                     ${designSettings.title || 'Age Verification'}
                 </h2>
