@@ -63,18 +63,10 @@ class ProductController extends Controller
                             title
                             description
                             handle
-                            productOptions {
-                                name
-                                values
-                            }
                             variants(first: 1) {
                                 edges {
                                     node {
                                         price
-                                        optionValues {
-                                            name
-                                            value
-                                        }
                                     }
                                 }
                             }
@@ -107,7 +99,6 @@ class ProductController extends Controller
                     'price' => $product['variants']['edges'][0]['node']['price'] ?? '0.00',
                     'url' => "https://{$shopDomain}/products/{$product['handle']}",
                     'is_selected' => in_array($product['id'], $selectedProductIds),
-                    'options' => $product['productOptions'] ?? [], // Include product options
                 ];
             });
 
