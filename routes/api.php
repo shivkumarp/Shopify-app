@@ -21,8 +21,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/settings/{userId}', [ThemeChangeController::class, 'getSettings'])->name('theme-settings');
-Route::post('/app-uninstall',[ShopifyUninstallController::class ,'appUninstall'])->name('app-uninstall');
-Route::post('/shopify/redact',[ShopifyUninstallController::class ,'appRedact'])->name('app-redact');
-Route::post('/customers/redact',[ShopifyUninstallController::class ,'appRedact'])->name('customers-redact');
+Route::post('/app/uninstalled',[ShopifyUninstallController::class ,'appUninstall'])->name('app-uninstall');
+Route::post('/shop/redact',[ShopifyUninstallController::class ,'appRedact'])->name('app-redact');
 Route::post('/customers/data_request',[ShopifyUninstallController::class ,'appRedact'])->name('customers-request');
+Route::post('/customers/redact',[ShopifyUninstallController::class ,'appRedact'])->name('customers-redact');
 // Route::post('/genrate-hmac',[ShopifyUninstallController::class ,'generateHmac'])->name('generate-hmac');

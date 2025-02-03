@@ -347,19 +347,19 @@ return [
     'webhooks' => [
         [
             'topic' => env('SHOPIFY_WEBHOOK_1_TOPIC', 'APP_UNINSTALLED'),
-            'address' => env('SHOPIFY_WEBHOOK_1_ADDRESS', 'https://codeoink.com/api/app-uninstall')
+            'address' => env('SHOPIFY_WEBHOOK_1_ADDRESS', 'https://codeoink.com/api/app/uninstalled')
         ],
         [
             'topic' => env('SHOPIFY_WEBHOOK_2_TOPIC', 'SHOP_REDACT'),
-            'address' => env('SHOPIFY_WEBHOOK_2_ADDRESS', 'https://codeoink.com/api/shopify/redact')
+            'address' => env('SHOPIFY_WEBHOOK_2_ADDRESS', 'https://codeoink.com/api/shop/redact')
         ],
         [
             'topic' => env('SHOPIFY_WEBHOOK_3_TOPIC', 'CUSTOMERS_DATA_REQUEST'),
-            'address' => env('SHOPIFY_WEBHOOK_3_ADDRESS', 'https://codeoink.com/api/customers/redact')
+            'address' => env('SHOPIFY_WEBHOOK_3_ADDRESS', 'https://codeoink.com/api/customers/data_request')
         ],
         [
             'topic' => env('SHOPIFY_WEBHOOK_4_TOPIC', 'CUSTOMERS_REDACT'),
-            'address' => env('SHOPIFY_WEBHOOK_4_ADDRESS', 'https://codeoink.com/api/customers/data_request')
+            'address' => env('SHOPIFY_WEBHOOK_4_ADDRESS', 'https://codeoink.com/api/customers/redact')
         ],
         /*
             [
